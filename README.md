@@ -119,7 +119,7 @@ Otherwise, change the target temperature.
 
 ![Settings](https://github.com/user-attachments/assets/62b36232-0031-49fe-a8d5-0dda6c6f71aa)
 
-Fan Control:
+### Fan Control:
 Function: when the heater is switched on, the fan always runs, even if the target temperature has been reached (heating element is switched off).
 If the heating element is switched on in normal mode, this is now displayed with "ON".
 If switched off, it is displayed with "on".
