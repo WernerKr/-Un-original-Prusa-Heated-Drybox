@@ -107,11 +107,12 @@ The minimum value is 10%			// This humidity level will probably not be reached w
 
 ![2024-08-28 14 24 20](https://github.com/user-attachments/assets/c4e86f0e-9a17-4532-97dc-66cc20944308)
 ![2024-08-28 14 34 04](https://github.com/user-attachments/assets/572a69a7-5793-462f-8bdd-c80798b78fcc)
-On the picture you see a AutoHum value of 45% and the Heater is on (ON)
-The humidity value is 44.4% (AutoHum value reached) the Heater is off (on)
-The fan delay starts and the fan is also switched off in 230 seconds.
-If the humidity rised to 46% the heater and fan is ON again. 
-
+```
+ On the picture you see a AutoHum value of 45% and the Heater is on (ON)
+ The humidity value is 44.4% (AutoHum value reached) the Heater is off (on)
+ The fan delay starts and the fan is also switched off in 230 seconds (need fan control).
+ If the humidity rised to 46% the heater and fan is ON again. 
+```
 The settings of the AutoOff Minutes and AutoHum times is now automatical done after 30 seconds!
 A dot will appear on the far right side if the change of the values of AutoOff or AutoHum is still active.
 Otherwise, change the target temperature.
