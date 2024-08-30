@@ -136,7 +136,9 @@ This run-on time is then counted down in the display after switching off.
 The fan shutdown time now depends on the selected target temperature (60 - 900 seconds)
 
 If you have installed a second temperature sensor, you can with 
+```
 bool overHeat = true;
+```
 monitor the temperature directly on the heating element and when the max temperature (°C)
 ```
 int Max = 93;		// = 199 °F
@@ -144,14 +146,16 @@ int Max = 93;		// = 199 °F
 is reached, the heating is also switched off (fan continues to run if second Mosfet is used)
 
 Other settings:
+```
 #define showFraction
+```
 Now also in the State Line the Temperatur or Humidity are shown with fraction.
-If you like the former showing (only Integer) uncomment #define showFraction
+If you like the former showing (only Integer) uncomment //#define showFraction
 
 If Duct is installed, the system is slower, so the change temperature is set to 0.2°C here, otherwise 0.5°C
-...
+```
 bool withDuct = true;                     // Duct installed -> Tempdiff = 0.2°C otherwise 0.5°C
-...
+```
 
 ### But be careful: 
     all electronic components used (temp sensor, Arduino, etc.) are only designed for a maximum ambient temperature of 80°C (176°F).
@@ -169,7 +173,7 @@ bool withDuct = true;                     // Duct installed -> Tempdiff = 0.2°C
 
 ### Also important!
     When the heating is on, air exchange must be able to take place, 
-    e.g. by lifting the front door or using the unused PFT outlets, 
+    e.g. by lifting the front door or using the unused PTFE outlets, 
     otherwise humidity reduction cannot take place.
 ![2024-08-29 10 37 31](https://github.com/user-attachments/assets/7d6a6abf-3142-47a8-ad62-016dbb75a41a)
     ![2024-08-29 10 37 23](https://github.com/user-attachments/assets/fd8e3088-1ef1-4410-a763-4399379b0c08)
