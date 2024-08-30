@@ -2,7 +2,7 @@
 sold from BlueRolls: processor ATmege328P (OldBootloader)
 Code files for the heater 
 
- Main file = Serial.ino
+### Main file = Serial.ino
 
 
 Support a second temperature/humidity sensor (DHT21 or DHT22)
@@ -16,8 +16,9 @@ Overheating control (with second temperatur/humidity sensor) - not active if no 
 
 Fan control: Vin+ to 24V+, Vin- to 24V-(Gnd), Out+ to Fan red, Out- to Fan black, Gnd to Buck-Convert Out- or Arduino GND
 //Arduino pin where the control line for the Mosfet is connected
+..
 #define Fan 5
-
+..
 Led strip control: Vin+ to 24V+, Vin- to 24V-(Gnd), Out+ to Led red, Out- to Led black, Gnd to Buck-Convert Out- or Arduino GND
 24V Led strip:
 #define controlLed
@@ -121,12 +122,13 @@ Now also in the State Line the Temperatur or Humidity are shown with fraction.
 If you like the former showing (only Integer) uncomment #define showFraction
 
 If Duct is installed, the system is slower, so the change temperature is set to 0.2°C here, otherwise 0.5°C
+...
 bool withDuct = true;                     // Duct installed -> Tempdiff = 0.2°C otherwise 0.5°C
+...
 
-
-# But be careful: 
-# all electronic components used (temp sensor, Arduino, etc.) are only designed for a maximum ambient temperature of 80°C (176°F).
-# And you should also note: Maximum operating temperature of the fan is 70°C
-# If using inside the (Un)original Prusa Heated Drybox a LED strip you should know:
-# the maximum operating temperature of the LED strip is normally 60°C! 
+### But be careful: 
+### all electronic components used (temp sensor, Arduino, etc.) are only designed for a maximum ambient temperature of 80°C (176°F).
+### And you should also note: Maximum operating temperature of the fan is 70°C
+### If using inside the (Un)original Prusa Heated Drybox a LED strip you should know:
+### the maximum operating temperature of the LED strip is normally 60°C! 
 
