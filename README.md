@@ -144,8 +144,23 @@ bool withDuct = true;                     // Duct installed -> Tempdiff = 0.2°C
 ...
 
 ### But be careful: 
-### all electronic components used (temp sensor, Arduino, etc.) are only designed for a maximum ambient temperature of 80°C (176°F).
-### And you should also note: Maximum operating temperature of the fan is 70°C
-### If using inside the (Un)original Prusa Heated Drybox a LED strip you should know:
-### the maximum operating temperature of the LED strip is normally 60°C! 
+    all electronic components used (temp sensor, Arduino, etc.) are only designed for a maximum ambient temperature of 80°C (176°F).
+    And you should also note: Maximum operating temperature of the fan is 70°C
+    If using inside the (Un)original Prusa Heated Drybox a LED strip you should know:
+    the maximum operating temperature of the LED strip is normally 60°C! 
+
+#### Warning!
+     If the fan control is not used, the fans must be permanently connected to the 24 V voltage.
+     The display behaves as if the additional fan control were present, showing a countdown in seconds for the fan to shut down!
+
+#### My recommendation for the filament to be used for "Bracket Y" and "condotto 5" is PC blend 
+#### or an even higher temperature resistant filament.
+#### In my experience, even ASA is not suitable!
+
+### Also important!
+    When the heating is on, air exchange must be able to take place, 
+    e.g. by lifting the front door or using the unused PFT outlets, 
+    otherwise humidity reduction cannot take place.
+    ![2024-08-29 10 37 31](https://github.com/user-attachments/assets/7d6a6abf-3142-47a8-ad62-016dbb75a41a)
+    ![2024-08-29 10 37 23](https://github.com/user-attachments/assets/fd8e3088-1ef1-4410-a763-4399379b0c08)
 
