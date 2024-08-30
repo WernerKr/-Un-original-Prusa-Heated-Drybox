@@ -103,7 +103,10 @@ The default Auto Hum value is 35 %
 int TargetHum = 35;
 ```
 The maximum percent for standby = 65 %		// with so high value you can simple test the AutoHum function!
-The minimum value is 10%			// This humidity level will probably not be reached with heating! 
+The minimum value is 10%			// This humidity level will probably not be reached with heating!
+
+![2024-08-28 14 24 20](https://github.com/user-attachments/assets/c4e86f0e-9a17-4532-97dc-66cc20944308)
+![2024-08-28 14 34 04](https://github.com/user-attachments/assets/572a69a7-5793-462f-8bdd-c80798b78fcc)
 
 The settings of the AutoOff Minutes and AutoHum times is now automatical done after 30 seconds!
 A dot will appear on the far right side if the change of the values of AutoOff or AutoHum is still active.
@@ -161,6 +164,6 @@ bool withDuct = true;                     // Duct installed -> Tempdiff = 0.2°C
     When the heating is on, air exchange must be able to take place, 
     e.g. by lifting the front door or using the unused PFT outlets, 
     otherwise humidity reduction cannot take place.
-    ![2024-08-29 10 37 31](https://github.com/user-attachments/assets/7d6a6abf-3142-47a8-ad62-016dbb75a41a)
+![2024-08-29 10 37 31](https://github.com/user-attachments/assets/7d6a6abf-3142-47a8-ad62-016dbb75a41a)
     ![2024-08-29 10 37 23](https://github.com/user-attachments/assets/fd8e3088-1ef1-4410-a763-4399379b0c08)
 
