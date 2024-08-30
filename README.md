@@ -2,7 +2,7 @@
 sold from BlueRolls: processor ATmege328P (OldBootloader)
 Code files for the heater 
 
-Main file = serial.ino
+Main file = Serial.ino
 
 
 Support a second temperature/humidity sensor (DHT21 or DHT22)
