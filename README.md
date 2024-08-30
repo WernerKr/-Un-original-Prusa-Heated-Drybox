@@ -1,5 +1,5 @@
 # -Un-original-Prusa-Heated-Drybox Code for Ardunio (Nano) 
-sold from BlueRolls: processor ATmege328P (OldBootloader)
+sold from Blurolls: processor ATmega328P (OldBootloader)
 Code files for the heater 
 
 ### Main file = Serial.ino
