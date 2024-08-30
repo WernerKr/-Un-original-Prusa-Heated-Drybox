@@ -124,9 +124,9 @@ If Duct is installed, the system is slower, so the change temperature is set to 
 bool withDuct = true;                     // Duct installed -> Tempdiff = 0.2°C otherwise 0.5°C
 
 
-But be careful: 
-all electronic components used (temp sensor, Arduino, etc.) are only designed for a maximum ambient temperature of 80°C (176°F).
-And you should also note: Maximum operating temperature of the fan is 70°C
-If using inside the (Un)original Prusa Heated Drybox a LED strip you should know:
-the maximum operating temperature of the LED strip is normally 60°C! 
+# But be careful: 
+# all electronic components used (temp sensor, Arduino, etc.) are only designed for a maximum ambient temperature of 80°C (176°F).
+# And you should also note: Maximum operating temperature of the fan is 70°C
+# If using inside the (Un)original Prusa Heated Drybox a LED strip you should know:
+# the maximum operating temperature of the LED strip is normally 60°C! 
 
