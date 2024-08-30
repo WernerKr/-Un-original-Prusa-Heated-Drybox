@@ -117,6 +117,8 @@ The settings of the AutoOff Minutes and AutoHum times is now automatical done af
 A dot will appear on the far right side if the change of the values of AutoOff or AutoHum is still active.
 Otherwise, change the target temperature.
 
+![Settings](https://github.com/user-attachments/assets/62b36232-0031-49fe-a8d5-0dda6c6f71aa)
+
 Fan Control:
 Function: when the heater is switched on, the fan always runs, even if the target temperature has been reached (heating element is switched off).
 If the heating element is switched on in normal mode, this is now displayed with "ON".
