@@ -2,6 +2,9 @@
 sold from BlueRolls: processor ATmege328P (OldBootloader)
 Code files for the heater 
 
+Main file = serial.ino
+
+
 Support a second temperature/humidity sensor (DHT21 or DHT22)
 You need then additional the Arduino library "DHT-sensor-library"
 
