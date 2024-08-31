@@ -108,6 +108,9 @@ When the heating is switched on, you can activate the heating AutoOff mode by pr
  ### First and hold the "+" (middle button) and then "on/off" (above button) button.
 You may have to try a few times until it works. The display shows then "AutoOff"
 
+![AutoOff](https://github.com/user-attachments/assets/677255e3-7602-4d73-b343-3711d502cdc9)
+
+
 The default switch-off value is 360 minutes
 ```
 int AutoOffTime = 360;
@@ -121,6 +124,9 @@ The minimum value is 10 minutes.
 When the heating is switched on, you can activate the heating AutoHum mode by pressing the
  ### First and hold the "-" (below button) and then "on/off" (above button) button.
 You may have to try a few times until it works.  The display shows then "AutoHum"
+
+![AutoHum](https://github.com/user-attachments/assets/97c53ffc-8a5c-47c9-a0d7-6cbc97609373)
+
 
 If the set Humidity value (10-65%), default 35% is reached the heater is switched off
 the Fan delay starts and after the set time the fan is also switched off (only with extra Mosfet for fan!)
@@ -157,11 +163,15 @@ In AutoOff mode, a switched on heating element is displayed with "A" and a white
 if switched off, it is displayed with "A" and a black background.
 When overtemperature is reached, "Hi" is displayed instead of "ON" and the heater is switched off until the temperature drops again.
 In AutoOff mode instead of "A" then "H"
- 
+
+ ![Vertical Display hiTemp](https://github.com/user-attachments/assets/e630dfd2-9fed-4148-8150-7f9b5135c053)
+
 When the heater is switched off (directly or via AutoOff), the fan continues to run for an adjustable time:
 ```
 int FanDelay = 300;
 ```
+![Vertical Display](https://github.com/user-attachments/assets/32e77ae5-27ff-4cd1-b51f-0e76d06c6672)
+
 This run-on time is then counted down in the display after switching off.
 The fan shutdown time now depends on the selected target temperature (60 - 900 seconds)
 
