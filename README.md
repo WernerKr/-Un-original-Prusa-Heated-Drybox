@@ -1,12 +1,32 @@
 # -Un-original-Prusa-Heated-Drybox Code for Ardunio (Nano) 
-sold from Blurolls: processor ATmega328P (OldBootloader)
+https://www.printables.com/de/model/883817-unoriginal-prusa-heated-drybox
+
+Parts sold from Blurolls: processor ATmega328P (OldBootloader)
+
+![DryBox](https://github.com/user-attachments/assets/9d7f4efc-d48a-4369-b78b-b287c5fc9cd7)
+
+![Heater_off](https://github.com/user-attachments/assets/19ebee2a-b499-4e50-a4b3-5955bad877ee)
+![Heater_on](https://github.com/user-attachments/assets/a007e035-a8de-42e3-872a-942b5bdcf179)
+
+![Heater_offF](https://github.com/user-attachments/assets/02681fed-7551-4cb5-92fd-f77afdf04b4e)
+![TargetTempF](https://github.com/user-attachments/assets/f6c2219c-9765-45e8-b5a4-053db0204314)
+
+
+![With duct](https://github.com/user-attachments/assets/7fc5b59c-0aac-4b53-aea3-175a320b5d3d)
+
+
+
 Code files for the heater 
 
 ### Main file = Serial.ino
+![Arduino IDE](https://github.com/user-attachments/assets/ad56c513-1821-44f5-b948-361721efd630)
 
 
 Support a second temperature/humidity sensor (DHT21 or DHT22)
 You need then additional the Arduino library "DHT-sensor-library"
+![SecondSensor1](https://github.com/user-attachments/assets/e8478190-3d34-47f4-bfc4-27f61d9281c5)
+![SecondSensor2](https://github.com/user-attachments/assets/99cd2411-968e-4d7e-8500-d323ce40b612)
+
 
 Control the fan via a second mosfet
 Can Control a led strip via a third mosfet
@@ -44,6 +64,11 @@ The other pins of this second sensor are to be connected to 5V and GND.
 
 If the second sensor is activated but there is no second sensor,
 0.0% and 0.0°C are displayed in the data line.
+
+## Protection for the Wires
+![High temperature wire protection](https://github.com/user-attachments/assets/1860929f-a979-4548-8b35-190cc300163e)
+
+
 
 If the heating is switched off, you can use the
 #### "-" button (= bottom button) to switch on or off to the normal display (no display of the data from the second sensor).
