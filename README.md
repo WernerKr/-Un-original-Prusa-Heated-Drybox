@@ -45,6 +45,11 @@ Led strip control: Vin+ to 24V+, Vin- to 24V-(Gnd), Out+ to Led red, Out- to Led
 #define controlLed
 #define Led 4
 ```
+![Led_strip_wire](https://github.com/user-attachments/assets/1af6b4a9-6b81-408e-a03d-740f8c64cf99)
+![Led_strip1](https://github.com/user-attachments/assets/423c547b-8754-46cb-bdc2-d03944e5a795)
+![Led_strip_on](https://github.com/user-attachments/assets/8a4ddedd-d2d5-4632-a0f2-fccb9b7ee07f)
+
+
 In the program, the second sensor is switched on with
 ```
 #define SecondTemp
