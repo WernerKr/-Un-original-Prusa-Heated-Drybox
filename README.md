@@ -13,6 +13,7 @@ Parts sold from Blurolls: processor ATmega328P (OldBootloader)
 
 
 ![With duct](https://github.com/user-attachments/assets/7fc5b59c-0aac-4b53-aea3-175a320b5d3d)
+![Drybox_with_duct](https://github.com/user-attachments/assets/e4900aaa-83cf-4a48-a0a8-7c7a8acd7120)
 
 
 
@@ -24,7 +25,8 @@ Code files for the heater
 
 Support a second temperature/humidity sensor (DHT21 or DHT22)
 You need then additional the Arduino library "DHT-sensor-library"
-![SecondSensor1](https://github.com/user-attachments/assets/e8478190-3d34-47f4-bfc4-27f61d9281c5)
+
+![SecondSensor1](https://github.com/user-attachments/assets/ab4d7196-bf3d-40a5-a764-5d4ee09c2fb8)
 ![SecondSensor2](https://github.com/user-attachments/assets/99cd2411-968e-4d7e-8500-d323ce40b612)
 
 
@@ -191,6 +193,10 @@ Other settings:
 ```
 Now also in the State Line the Temperatur or Humidity are shown with fraction.
 If you like the former showing (only Integer) uncomment //#define showFraction
+
+![AutoOff_HeaterOn_secondSensor_showFraction](https://github.com/user-attachments/assets/a1cd961f-3ddd-4f4c-bae2-ebb3d10f07f5)
+![AutoOff_HeaterOn_secondSensor_not_showFraction](https://github.com/user-attachments/assets/3bcbc863-9e21-43b3-ad70-5486f358f208)
+
 
 If Duct is installed, the system is slower, so the change temperature is set to 0.2°C here, otherwise 0.5°C
 ```
