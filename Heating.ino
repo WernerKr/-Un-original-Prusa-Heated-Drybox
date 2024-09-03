@@ -8,7 +8,7 @@ void sensorUpdate(){
     //Temperature2 = 103.3;
    #endif
    if (overHeat == true){
-   if (Temperature2 >= Max)
+   if (Temperature2 >= HeatMaxValue)
       { TempHigh = true; }
    else
       { 

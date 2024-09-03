@@ -74,7 +74,7 @@ void drawLogo() {
 }
 
 void drawStatus() {
-   if ((AutoOffSet == true) or (AutoHumSet == true))
+   if ((AutoOffSet == true) or (AutoHumSet == true) or (HeatMaxSet == true))
    {
     display.setTextSize(1);
     display.setCursor(122, 25);
@@ -525,15 +525,19 @@ void drawTemperature2() {
     #endif
 
     #ifndef Fahrenheit
-      display.setCursor(70,48);
+      if(Temperature2 > 100){
+        display.setCursor(70,48);
+      } else {
+        display.setCursor(98,48);
+        display.print(TempFractionDisplay);
+        display.fillRect(94, 60, 2, 2, SSD1306_WHITE);  
+        display.setCursor(70,48);     
+      }
       display.print(TempIntegerDisplay);
-      display.setCursor(98,48);
-      display.print(TempFractionDisplay);
-      display.setCursor(116,48);
-      display.print(F("C"));
-      display.fillRect(94, 60, 2, 2, SSD1306_WHITE);
       display.fillCircle(111, 50, 2, SSD1306_WHITE);
       display.fillCircle(111, 50, 1, SSD1306_BLACK);
+      display.setCursor(116,48);
+      display.print(F("C"));
     #endif
   
 }
@@ -567,6 +571,32 @@ void drawTargetTemperature() {
   display.print(F("Temp"));
 
   dtostrf(TargetTemp, 3, 0, TargetTempDisplay);
+
+  display.setTextSize(4);
+  display.setTextColor(SSD1306_WHITE);
+    display.setCursor(4,30);
+    display.print(TargetTempDisplay);
+    display.setCursor(90,30);
+    #ifdef Fahrenheit
+    display.print(F("F"));
+    #endif
+    #ifndef Fahrenheit
+    display.print(F("C"));
+    #endif
+    display.fillCircle(81, 34, 4, SSD1306_WHITE);
+    display.fillCircle(81, 34, 2, SSD1306_BLACK);
+
+}
+
+void drawHeatMax() {
+  display.setCursor(0, 2);
+  display.setTextSize(2);
+  display.setTextColor(SSD1306_WHITE);
+  display.print(F("Heat"));
+  display.setCursor(80, 2);
+  display.print(F("Max"));
+
+  dtostrf(HeatMaxValue, 3, 0, TargetTempDisplay);
 
   display.setTextSize(4);
   display.setTextColor(SSD1306_WHITE);

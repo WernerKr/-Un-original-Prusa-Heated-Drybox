@@ -60,17 +60,16 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 DFRobot_DHT20 dht20;
 DHT dht(DHT_PIN, DHT_TYPE);
 
-bool overHeat = false;                     // control overheating - only used if second temp/hum is available
+bool overHeat = true;                     // control overheating - only used if second temp/hum is available
 bool withDuct = true;                     // Duct installed -> Tempdiff = 0.2°C otherwise 0.5°C
 int TargetTemp = 45;
-int Max = 93;                             // overHeating Temp need #overHeat = true 
-int MaxSet = 70;                          // max allowed setting TargetTemp
-int MinSet = 20;                          // min allowed setting TargetTemp
+int MaxSet = 70;                          // max allowed setting TargetTemp °C
+int MinSet = 20;                          // min allowed setting TargetTemp °C
 int AutoOffTime = 360;                    // here 6 hours
 int MaxAutoOffTime = 2880;                // max 2 days
 int FanDelay = 300;                       // 300 seconds=5 minutes max 999 seconds because Display
 int FanCor = 50;                          // >= 50°C TargetTemp add to Fandelay 120 sec
-int FanCor1 = 55;
+int FanCor1 = 55;                         // all FanCor in °C
 int FanCor2 = 60;
 int FanCor3 = 65;
 int FanCor4 = 70;
@@ -84,6 +83,11 @@ int AutoHumValue = 35;
 int MaxHumSet = 65;                        // max allowed setting TargetHum
 int MinHumSet = 10;                        // min allowed setting TargetHum - but maybe will never be reached!
 bool HumOff = false;
+
+int Max = 123;                            // overHeating Temp need #overHeat = true 
+int HeatMax = 140;
+int HeatMin = 70;
+int HeatMaxValue = 123;
 
 float TemperatureCor = 0.0;               // correction Temperatur
 float HumidityCor = 0.0;                  // correction Humidity
@@ -105,6 +109,7 @@ bool AutoOff = false;
 bool AutoOffSet = false;
 bool AutoHum = false;
 bool AutoHumSet = false;
+bool HeatMaxSet = false;
 bool FanOn = false;
 bool FanHumOn = false;
 bool TempHigh = false;
@@ -179,9 +184,13 @@ void setup(){
    #endif
   #endif 
   #ifdef Fahrenheit
-    TargetTemp = 113;
-    MaxSet = 158;
-    int Max = 200;
+    TargetTemp = int(TargetTemp *9/5) + 32);
+    MaxSet = int(MaxSet *9/5) + 32);
+    int Max = int(Max *9/5) + 32);
+    int HeatMaxValue= Max;
+    int HeatMax = int(HeatMax *9/5) + 32);
+    int HeatMin = int(HeatMin *9/5) + 32);
+
     #ifdef PC
      int Max = 235;
     #endif
@@ -195,16 +204,16 @@ void setup(){
      int Max = 158;
     #endif
 
-    MinSet = 50;
-    int FanCor = 122;
-    int FanCor1 = 131;
-    int FanCor2 = 140;
-    int FanCor3 = 149;
-    int FanCor4 = 158;
-    int FanCor01 = 104;
-    int FanCor02 = 95;
-    int FanCor03 = 86;
-    int FanCor04 = 77;
+    MinSet = int(MinSet *9/5) + 32);
+    int FanCor = int(FanCor *9/5) + 32);
+    int FanCor1 = int(FanCor1 *9/5) + 32);
+    int FanCor2 = int(FanCor2 *9/5) + 32);
+    int FanCor3 = int(FanCor3 *9/5) + 32);
+    int FanCor4 = int(FanCor4 *9/5) + 32);
+    int FanCor01 = int(FanCor01 *9/5) + 32);
+    int FanCor02 = int(FanCor02 *9/5) + 32);
+    int FanCor03 = int(FanCor03 *9/5) + 32);
+    int FanCor04 = int(FanCor04  *9/5) + 32);
 
     char text[] = "°F"; 
    if (withDuct == true)
@@ -289,6 +298,14 @@ void loop(){
      AutoOff = false;
     }
 
+    #ifdef SecondTemp 
+    if((digitalRead(Button3) == LOW) and (digitalRead(Button2) == LOW))
+    { 
+     HeatMaxSet = true;  
+     AutoOffSetpreviousMillis = currentMillis;
+    }
+    #endif
+
     if ((AutoOffSet == true) and (currentMillis - AutoOffSetpreviousMillis >= 30000) )       // after 30 seconds settings for AutoOffSet off
     {
      AutoOffSet = false;
@@ -298,7 +315,13 @@ void loop(){
     {
      AutoHumSet = false;
     }
- 
+
+    #ifdef SecondTemp 
+    if ((HeatMaxSet == true) and (currentMillis - AutoOffSetpreviousMillis >= 30000) )       // after 30 seconds settings for AutoHumSet off
+    {
+     HeatMaxSet = false;
+    }
+    #endif
 
     if ((digitalRead(Button1) == LOW) and (digitalRead(Button2) == HIGH) and (digitalRead(Button3) == HIGH) ){                 // Action button 1: switch heating system from on to off
       status = !status;
@@ -312,6 +335,7 @@ void loop(){
       sensorUpdate();
       digitalWrite(Heater, LOW);
       Hot = false;
+      HeatMaxValue = Max;
       display.clearDisplay();
       drawStatus();
       if (status == true) {
@@ -334,7 +358,7 @@ void loop(){
     }
 
     if(digitalRead(Button2) == LOW) {                 // Action button 2: increase target temperature
-     if ((AutoOffSet == false) and (AutoHumSet == false)) {
+     if ((AutoOffSet == false) and (AutoHumSet == false) and (HeatMaxSet == false)) {
       TargetTemp = TargetTemp + 1;
       if (TargetTemp > MaxSet)
       { TargetTemp = MaxSet;}      
@@ -351,7 +375,7 @@ void loop(){
       if (TargetTemp >= FanCor3) { FanDelay = 780; FanValue = FanDelay;} 
       if (TargetTemp >= FanCor4) { FanDelay = 900; FanValue = FanDelay;} 
      } 
-     if ((AutoOffSet == true) and (AutoHumSet == false))                          // or increase AutoOff time
+     if ((AutoOffSet == true) and (AutoHumSet == false) and (HeatMaxSet == false))                          // or increase AutoOff time
      {                                          
       AutoOffTimeValue = AutoOffTimeValue + 10;
       if (AutoOffTimeValue > MaxAutoOffTime)
@@ -360,7 +384,7 @@ void loop(){
       display.clearDisplay();
       drawAutoOfftMinutes();
      }
-     if ((AutoHumSet == true) and (AutoOffSet == false))
+     if ((AutoHumSet == true) and (AutoOffSet == false) and (HeatMaxSet == false))
      {
       AutoHumValue = AutoHumValue + 1;
       if (AutoHumValue > MaxHumSet)
@@ -369,13 +393,24 @@ void loop(){
       display.clearDisplay();
       drawAutoHum();
      }
+    #ifdef SecondTemp      
+     if ((AutoHumSet == false) and (AutoOffSet == false) and (HeatMaxSet == true))
+     {
+      HeatMaxValue = HeatMaxValue + 1;
+      if (HeatMaxValue > HeatMax)
+      { HeatMaxValue = HeatMax;}      
+      previousMillis = currentMillis;
+      display.clearDisplay();
+      drawHeatMax();
+     }
+    #endif
 
      display.display();
      delay(200);
     }
 
     if(digitalRead(Button3) == LOW) {                 // Action button 3: decrease target temperature
-     if ((AutoOffSet == false) and (AutoHumSet == false)) {
+     if ((AutoOffSet == false) and (AutoHumSet == false) and (HeatMaxSet == false)) {
        TargetTemp = TargetTemp - 1;
        if (TargetTemp < MinSet)
         { TargetTemp = MinSet;}
@@ -401,7 +436,7 @@ void loop(){
        display.clearDisplay();
        drawAutoOfftMinutes();
      }
-     if ((AutoHumSet == true) and (AutoOffSet == false))
+     if ((AutoHumSet == true) and (AutoOffSet == false) and (HeatMaxSet == false))
      {
        AutoHumValue = AutoHumValue - 1;
        if (AutoHumValue < MinHumSet)
@@ -410,6 +445,17 @@ void loop(){
        display.clearDisplay();
        drawAutoHum();
      }
+    #ifdef SecondTemp      
+     if ((AutoHumSet == false) and (AutoOffSet == false) and (HeatMaxSet == true))
+     {
+      HeatMaxValue = HeatMaxValue - 1;
+      if (HeatMaxValue < HeatMin)
+      { HeatMaxValue = HeatMin;}      
+      previousMillis = currentMillis;
+      display.clearDisplay();
+      drawHeatMax();
+     }
+    #endif
 
      display.display();
      delay(200);
