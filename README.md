@@ -15,9 +15,75 @@ Parts sold from Blurolls: processor ATmega328P (OldBootloader)
 ![With duct](https://github.com/user-attachments/assets/7fc5b59c-0aac-4b53-aea3-175a320b5d3d)
 ![Drybox_with_duct](https://github.com/user-attachments/assets/e4900aaa-83cf-4a48-a0a8-7c7a8acd7120)
 
+## Heating test series:
+```
+Sensor Ecowitt WN34AD Temperature range -55..+125°C, Measuring cycle 77 seconds
+```
+![Ecowitt WN34AD_0](https://github.com/user-attachments/assets/2acd563e-9875-46dd-b9a1-2b5507f4d982)
+```
+Sensor DHT21  Temperature range -40..+80°C, here Measuring cycle 5 seonds
+```
+![DHT21](https://github.com/user-attachments/assets/9c1d9851-4e93-447c-ad65-1c769708b2a5)
+```
+Empty Box! With Duct from "morap"
+WN34AD in the measuring hole of the duct
+Second sensor DHT21 at the bottom of the box under the duct
+```
+![Messung](https://github.com/user-attachments/assets/d011207d-e09e-4f0a-a81a-9109b42e64a6)
+
+```
+DHT21 Duct: Previous measurement with DHT21 on the duct and temperature limitation at 123°C
+```
+```
+All values are in °C - Time in minutes
+Time 	WN34AD	Display	DHT21	DHT21 Duct
+5	97.0	34.7	51.2	85
+6	100.6	36.3	53.9	90
+8	103.4	37.7	56.0	95
+9	105.6	39.2	58.0
+10	107.4	40.5	59.9
+11	108.4	41.7	61.4	100
+13	110.2	42.8	62.9	105
+14	111.3	43.8	64.2	110
+15	112.3	44.8	65.4
+17	113.1	45.7	66.2	113	
+18	113.8	46.6	67.4	115
+19	114.5	47.3	68.2
+21	115.1	48.0	69.0
+22	115.6	48.7	69.5
+23	116.1	49.3	70.2	119
+24	116.6	49.9	70.8	
+26	116.9	50.4	71.2	121
+27	117.3	50.9	71.7	
+28	117.6	51.4	72.0	122
+29	118.0	51.8	72.4
+31	118.2	52.2	72.7	123
+32	118.5	52.5	73.0
+33	118.8	52.8	73.4
+35	119.0	53.1	73.7
+36	119.3	53.4	73.9
+38	119.6	53.9	74.4
+40	120.0	54.2	74.7
+41	120.1	54.4	74.9
+42	120.2	54.6	75.0
+43	120.3	54.8	75.2
+45	120.5	55.0	75.4
+46	120.7	55.1	75.5
+47	120.8	55.3	75.6
+49	121.0	55.4	75.8
+```
+![Diagramm](https://github.com/user-attachments/assets/a7e9c619-54d4-4593-ade5-b7aaff6dce8e)
+```
+3DL shows temperature curve at the rear left.
+3D shows temperature curve at the front right
+```
+### End of testing:
+![End](https://github.com/user-attachments/assets/b67fae1c-2446-4816-93d6-413f0dfbe1f7)
+![Ecowitt WN3434AD_1](https://github.com/user-attachments/assets/8cfddba4-f08c-49e9-a29e-498368c2b26d)
 
 
-Code files for the heater 
+
+## Code files for the heater 
 
 ### Main file = Serial.ino
 ![Arduino IDE](https://github.com/user-attachments/assets/ad56c513-1821-44f5-b948-361721efd630)
