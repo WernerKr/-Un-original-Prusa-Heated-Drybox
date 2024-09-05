@@ -76,6 +76,8 @@ Time 	WN34AD	Display	DHT21	DHT21 Duct
 ```
 3DL shows temperature curve at the rear left.
 3D shows temperature curve at the front right
+Depends greatly on the temperature at the back in the middle on the floor (directly under the duct last 75.8°C)!
+
 ```
 ### End of testing:
 ![End](https://github.com/user-attachments/assets/b67fae1c-2446-4816-93d6-413f0dfbe1f7)
