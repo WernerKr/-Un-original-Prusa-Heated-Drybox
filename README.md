@@ -167,8 +167,8 @@ float Temperature2Cor = 0.0;
 float Humidity2Cor = 0.0;
 //The maximum adjustable temperature is limited to 70°C.
 int MaxSet = 70;  
-//The overheating temperature is set to 93°C
-int Max = 93;   
+//The overheating temperature is set to 83°C - now measured under the duct!
+int Max = 83;   
 ```
 This is because the Arduino should only be operated up to a maximum temperature of 80°C.
 If you want a higher temperature, you have to place the electronic components outside the housing! 
@@ -204,9 +204,9 @@ the Fan delay starts and after the set time the fan is also switched off (only w
 If the Humidity value increase the heater and fan is switched on again
 and so on. 
 
-The default Auto Hum value is 35 %
+The default Auto Hum value is 25 % - changed from 35% to 25%
 ```
-int TargetHum = 35;
+int TargetHum = 25;
 ```
 The maximum percent for standby = 65 %		// with so high value you can simple test the AutoHum function!
 The minimum value is 10%			// This humidity level will probably not be reached with heating!
@@ -251,7 +251,7 @@ bool overHeat = true;
 ```
 monitor the temperature directly on the heating element and when the max temperature (°C)
 ```
-int Max = 93;		// = 199 °F
+int Max = 83;		// = 181 °F
 ```
 is reached, the heating is also switched off (fan continues to run if second Mosfet is used)
 
