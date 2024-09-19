@@ -15,6 +15,43 @@ Parts sold from Blurolls: processor ATmega328P (OldBootloader)
 ![With duct](https://github.com/user-attachments/assets/7fc5b59c-0aac-4b53-aea3-175a320b5d3d)
 ![Drybox_with_duct](https://github.com/user-attachments/assets/e4900aaa-83cf-4a48-a0a8-7c7a8acd7120)
 
+
+## Final test:
+### New: two additional fans below the "duct" for much better air distribution
+### for Bracket Y, Beam A1, Beam A2, Beam A3, Beam A4, duct is now printed with Easy Nylon from Overture.
+### Heat resistance of PC blend is only 113°C/235°F, but over 120°C/248°F is achieved on Bracket Z and duct
+### Easy Nylon has a Heat resistance of 180°C/356°F
+
+![Fan 3and4](https://github.com/user-attachments/assets/1215fead-6184-4725-82ee-8169e7ac9c79)
+![Fan 3and4_0](https://github.com/user-attachments/assets/e9687ef8-00eb-48ab-ae89-d33dd17284c8)
+![Fan 3and4_1](https://github.com/user-attachments/assets/08f82a89-a02b-481d-9efb-b079f621ada4)
+![Additonanl_Fan0](https://github.com/user-attachments/assets/f244d5e3-d652-4fce-857a-0003b4fbc0d1)
+![Additional_Fan](https://github.com/user-attachments/assets/a95db112-566f-4278-b561-f9faa1f3ad50)
+### New measuring sensors: with Shelly Plus Add-on: DS18B20 - measuring range -55 °C to +125 °C
+
+The second temp/humidity sensor now measures the temperature on the floor under the duct
+```
+The front door was slightly open
+Temperature 2 : Temperature inside duct
+Temperature 3 : Temperature Back below duct
+Temperature 1 : Temperature front bottom right
+Temperature 4 : Temperature rear bottom left
+Temperature 5 : Temperature rear bottom right
+
+3D : Temperature/Hum Front bottom right
+3DL: Temperature/Hum Back bottom left
+3DR: Temperature/Hum Back bottom right
+```
+
+### TargetTemp 70°C
+![TempGraph_TargetTemp70_1](https://github.com/user-attachments/assets/cb4d5949-33ce-41c2-afa0-20b7bc2dc92f)
+![TempGraph_TargetTemp70_2](https://github.com/user-attachments/assets/7bcc4f38-0694-43f9-92ad-76e6c1fb6806)
+
+### TargetTemp 50°C
+![TempGraph_TargetTemp50](https://github.com/user-attachments/assets/e6bdaf7e-3aa2-4aec-a2a6-b23405ae19db)
+![2024-09-19 16 58 52](https://github.com/user-attachments/assets/d2a88b8f-4c89-4352-bb59-cb04fd0d9a21)
+
+
 ## Heating test series:
 ```
 Sensor Ecowitt WN34AD Temperature range -55..+125°C, Measuring cycle 77 seconds
