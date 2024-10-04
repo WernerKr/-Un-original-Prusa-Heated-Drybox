@@ -318,9 +318,9 @@ bool withDuct = true;                     // Duct installed -> Tempdiff = 0.2°C
      If the fan control is not used, the fans must be permanently connected to the 24 V voltage.
      The display behaves as if the additional fan control were present, showing a countdown in seconds for the fan to shut down!
 
-#### My recommendation for the filament to be used for "Bracket Y" and "condotto 5" is PC blend 
+#### My recommendation for the filament to be used for "Bracket Y" and "condotto 5" is Nylon 
 #### or an even higher temperature resistant filament.
-#### In my experience, even ASA is not suitable!
+#### In my experience, even PC blend or ASA is not suitable!
 
 ### Also important!
     When the heating is on, air exchange must be able to take place, 
