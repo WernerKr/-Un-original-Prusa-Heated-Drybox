@@ -1,5 +1,6 @@
 void sensorUpdate(){
   #ifdef SecondTemp
+
     Humidity2 = dht.readHumidity() + Humidity2Cor;
     Temperature2 = dht.readTemperature() + Temperature2Cor;
     //Temperature_F = dht.readTemperature(true);
@@ -7,7 +8,8 @@ void sensorUpdate(){
     Temperature2 = (Temperature2 *9/5) + 32;   // Converts temperature to fahrenheit if defined
     //Temperature2 = 103.3;
    #endif
-   if (overHeat == true){
+
+  if (overHeat == true){
    if (Temperature2 >= HeatMaxValue)
       { TempHigh = true; }
    else
@@ -15,6 +17,7 @@ void sensorUpdate(){
         TempHigh = false; 
       }
    } 
+
   #endif  
 
   Temperature = dht20.getTemperature() + TemperatureCor;      // Get temperature in degrees Celcius

@@ -7,6 +7,7 @@ and AutoOff Function
 and AutoHum Function
 and new Fan control, and Led Strip control
 If heater is set on, the data now updated each 5 sec otherwise 10 sec 
+The TargetTemp is now 50°C, the AutoHum ist now 25%
 Werner Krenn
 
 REQUIRES the following Arduino libraries:
@@ -28,24 +29,29 @@ REQUIRES the following Arduino libraries:
 
 // to see the Temp/Hum Data in the Serial Monitor uncomment next line
 // #define debug
-#define showFraction
 
-#define Button1 6
-#define Button2 7
-#define Button3 8
+#define showFraction                    // all values with decimal values otherwise only integer values
+
+#define Button1 6                       // on/off
+#define Button2 7                       // + increase
+#define Button3 8                       // - decrease  
 #define Heater 10
 #define Fan 5
 #define Led 4
 
-//#define PETG                         // Max = 70 °C
-//#define ABS                          // Max = 83 °C
-//#define ASA                          // Max = 93 °C
-//#define PC                           // Max = 113 °C
+//#define PETG                         // Max = 73 °C	163
+//#define ABS                          // Max = 83 °C	181
+//#define ASA                          // Max = 93 °C	199
+//#define PC                           // Max = 123 °C	253
+//#define PA                           // Max = 143 °C	289
 
 // If an LED strip needs to be controlled 
 #define controlLed
+#define ControllLedAutooff            // Led on and Temperature >=60°C/140°F (= max. operating temperature LED strip) the led is switched off
+
 // if have attached a second temp/hum Sensor (dht22 or dht21) uncomment next line
-#define SecondTemp
+#define SecondTemp                    // should be placed on the floor under the heater or duct
+
 #define DHT_PIN 9 // The Arduino Nano pin connected to DHT21/22 sensor
 #define DHT_TYPE DHT21
 //#define DHT_TYPE DHT22 
@@ -62,32 +68,32 @@ DHT dht(DHT_PIN, DHT_TYPE);
 
 bool overHeat = true;                     // control overheating - only used if second temp/hum is available
 bool withDuct = true;                     // Duct installed -> Tempdiff = 0.2°C otherwise 0.5°C
-int TargetTemp = 45;
+int TargetTemp = 50;
 int MaxSet = 70;                          // max allowed setting TargetTemp °C
 int MinSet = 20;                          // min allowed setting TargetTemp °C
 int AutoOffTime = 360;                    // here 6 hours
 int MaxAutoOffTime = 2880;                // max 2 days
-int FanDelay = 300;                       // 300 seconds=5 minutes max 999 seconds because Display
+int FanDelay = 300;                       // 300 seconds=5 minutes max 999 seconds because space Display
 int FanCor = 50;                          // >= 50°C TargetTemp add to Fandelay 120 sec
-int FanCor1 = 55;                         // all FanCor in °C
+int FanCor1 = 55;                         // all FanCor in °C - are later converted to Fahrenheit if set
 int FanCor2 = 60;
-int FanCor3 = 65;
-int FanCor4 = 70;
+//int FanCor3 = 65;
+//int FanCor4 = 70;
 int FanCor01 = 40;
 int FanCor02 = 35;
 int FanCor03 = 30;
 int FanCor04 = 25;
 
-int TargetHum = 35;
-int AutoHumValue = 35;
+int TargetHum = 30;
+int AutoHumValue = 30;
 int MaxHumSet = 65;                        // max allowed setting TargetHum
 int MinHumSet = 10;                        // min allowed setting TargetHum - but maybe will never be reached!
 bool HumOff = false;
 
-int Max = 123;                            // overHeating Temp need #overHeat = true 
+int Max = 83;                             // overHeating Temp under the duct, need #overHeat = true and SecondTemp
 int HeatMax = 140;
 int HeatMin = 70;
-int HeatMaxValue = 123;
+int HeatMaxValue = 83;
 
 float TemperatureCor = 0.0;               // correction Temperatur
 float HumidityCor = 0.0;                  // correction Humidity
@@ -115,6 +121,7 @@ bool FanHumOn = false;
 bool TempHigh = false;
 bool showSecondTemp = false;
 bool showLed = false;
+bool showLedSet = false;
 char text[] = "°C";
 
 float Temperature;
@@ -145,9 +152,10 @@ void setup(){
   pinMode(Led, OUTPUT);
 
   #ifdef SecondTemp
-   dht.begin(); // initialize the sensor
-   showSecondTemp = true;
+    dht.begin(); // initialize the sensor
+    showSecondTemp = true;
   #endif
+
   #ifdef controlLed
    showLed = true;
    //digitalWrite(Led, LOW);
@@ -169,47 +177,25 @@ void setup(){
   } else {
    tempDiff = 0.5;
   }
-  #ifndef Fahrenheit 
-   #ifdef PC
-     int Max = 113;
-   #endif
-   #ifdef ASA
-     int Max = 93;
-   #endif
-   #ifdef ABS
-     int Max = 83;
-   #endif
-   #ifdef PETG
-     int Max = 70;
-   #endif
+
+  #ifndef Fahrenheit
+   int HeatMaxValue= Max;
   #endif 
+
   #ifdef Fahrenheit
     TargetTemp = int(TargetTemp *9/5) + 32);
     MaxSet = int(MaxSet *9/5) + 32);
     int Max = int(Max *9/5) + 32);
-    int HeatMaxValue= Max;
     int HeatMax = int(HeatMax *9/5) + 32);
     int HeatMin = int(HeatMin *9/5) + 32);
 
-    #ifdef PC
-     int Max = 235;
-    #endif
-    #ifdef ASA
-     int Max = 200;
-    #endif
-    #ifdef ABS
-     int Max = 181;
-    #endif
-    #ifdef PETG
-     int Max = 158;
-    #endif
-
+    int HeatMaxValue= Max;
     MinSet = int(MinSet *9/5) + 32);
     int FanCor = int(FanCor *9/5) + 32);
     int FanCor1 = int(FanCor1 *9/5) + 32);
     int FanCor2 = int(FanCor2 *9/5) + 32);
-    int FanCor3 = int(FanCor3 *9/5) + 32);
-    int FanCor4 = int(FanCor4 *9/5) + 32);
+    //int FanCor3 = int(FanCor3 *9/5) + 32);
+    //int FanCor4 = int(FanCor4 *9/5) + 32);
     int FanCor01 = int(FanCor01 *9/5) + 32);
     int FanCor02 = int(FanCor02 *9/5) + 32);
     int FanCor03 = int(FanCor03 *9/5) + 32);
@@ -321,6 +307,26 @@ void loop(){
     {
      HeatMaxSet = false;
     }
+    
+    #ifdef controlLed
+    #ifdef ControllLedAutooff
+
+    #ifdef Fahrenheit
+    if ((showLed == true) and  (Temperature2 >= 140)) {
+    showLedSet = true;
+    digitalWrite(Led, LOW);
+    } 
+    #endif
+    #ifndef Fahrenheit
+    if ((showLed == true) and  (Temperature2 >= 60)) {
+    showLedSet = true;
+    digitalWrite(Led, LOW);
+    } 
+    #endif
+
+    #endif 
+    #endif
+    
     #endif
 
     if ((digitalRead(Button1) == LOW) and (digitalRead(Button2) == HIGH) and (digitalRead(Button3) == HIGH) ){                 // Action button 1: switch heating system from on to off
@@ -372,8 +378,8 @@ void loop(){
       if (TargetTemp >= FanCor) { FanDelay = 420; FanValue = FanDelay;} 
       if (TargetTemp >= FanCor1) { FanDelay = 540; FanValue = FanDelay;} 
       if (TargetTemp >= FanCor2) { FanDelay = 660; FanValue = FanDelay;} 
-      if (TargetTemp >= FanCor3) { FanDelay = 780; FanValue = FanDelay;} 
-      if (TargetTemp >= FanCor4) { FanDelay = 900; FanValue = FanDelay;} 
+      //if (TargetTemp >= FanCor3) { FanDelay = 780; FanValue = FanDelay;} 
+      //if (TargetTemp >= FanCor4) { FanDelay = 900; FanValue = FanDelay;} 
      } 
      if ((AutoOffSet == true) and (AutoHumSet == false) and (HeatMaxSet == false))                          // or increase AutoOff time
      {                                          
@@ -417,8 +423,8 @@ void loop(){
       previousMillis = currentMillis;
       display.clearDisplay();
       drawTargetTemperature();
-      if (TargetTemp < FanCor4) { FanDelay = 780; FanValue = FanDelay;}
-      if (TargetTemp < FanCor3) { FanDelay = 660; FanValue = FanDelay;}
+      //if (TargetTemp < FanCor4) { FanDelay = 780; FanValue = FanDelay;}
+      //if (TargetTemp < FanCor3) { FanDelay = 660; FanValue = FanDelay;}
       if (TargetTemp < FanCor2) { FanDelay = 540; FanValue = FanDelay;}
       if (TargetTemp < FanCor1) { FanDelay = 420; FanValue = FanDelay;}
       if (TargetTemp < FanCor) { FanDelay = 300; FanValue = FanDelay;}
@@ -561,30 +567,37 @@ void loop(){
      if((digitalRead(Button2) == LOW) and (not showLed)) {                 // Action button 2: LED on
       showLed = true;
       digitalWrite(Led, HIGH);
-      /*
-      display.clearDisplay();
-      drawStatus();
-      drawTemperature1();
-      drawHumidity1();
-      drawTemperature2();
-      drawHumidity2();
-      display.display(); 
-      */
       delay(200);
      } 
      if((digitalRead(Button2) == LOW) and (showLed)) {                 // Action button 2: LED off
       showLed = false;
+      showLedSet = false;
       digitalWrite(Led, LOW);
-      /*
-      display.clearDisplay();
-      drawStatus();
-      drawTemperature();
-      drawHumidity();
-      display.display(); 
-      */
       delay(200);
      } 
     }
+
+    #ifdef SecondTemp
+    #ifdef ControllLedAutooff
+    #ifdef Fahrenheit
+    if (((showLed == true) and (showLedSet == true)) and (Temperature2 < 140)) {
+    showLedSet = false;
+    digitalWrite(Led, HIGH);
+    } else {
+      if (Temperature2 < 140) {showLedSet == false;}
+      }
+    #endif
+    #ifndef Fahrenheit
+    if (((showLed == true) and (showLedSet == true)) and (Temperature2 < 60)) {
+    showLedSet = false;
+    digitalWrite(Led, HIGH);
+    } else {
+      if (Temperature2 < 60) {showLedSet == false;}
+      }
+    #endif
+    #endif 
+    #endif
+
     #endif
 
     if(currentMillis - previousMillis >= 10000) {     // Refreshes data on the display (every 10 seconds)
@@ -606,7 +619,6 @@ void loop(){
       }
       display.display();
     }
-
     #ifdef debug
     if(currentMillis - debugMillis >= 2000) {     // Updates Serial Monitor data every 2 seconds
       debugMillis = currentMillis;

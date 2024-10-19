@@ -108,7 +108,6 @@ void drawStatus() {
  
     display.setTextColor(SSD1306_BLACK);
     display.setCursor(80, 2);
-      //String Minuten = String(AutoOffTimeValue);
       dtostrf(AutoOffTimeValue, 4, 0, MinuteDisplay);
       //display.setTextColor(SSD1306_BLACK);
       display.println(MinuteDisplay);
@@ -159,7 +158,6 @@ void drawStatus() {
     display.setTextColor(SSD1306_BLACK);
     display.setCursor(68, 2);
     if (FanOn == true) {
-     //String test = String(FanValue);     
      //display.print(test);
      if (FanValue < 100) {
       if (FanValue <= 0) { 
@@ -294,7 +292,6 @@ void drawHumidity() {
     int HumFraction = int((Humidity-HumInteger)*10);
     dtostrf(HumInteger, 2, 0, HumIntegerDisplay);
     dtostrf(HumFraction, 1, 0, HumFractionDisplay);
-    // String HumX = String(Humidity);
 
     display.setTextSize(2);
     display.setTextColor(SSD1306_WHITE);
@@ -461,7 +458,6 @@ void drawHumidity1() {
     int HumFraction = int((Humidity-HumInteger)*10);
     dtostrf(HumInteger, 2, 0, HumIntegerDisplay);
     dtostrf(HumFraction, 1, 0, HumFractionDisplay);
-    // String HumX = String(Humidity);
 
     display.setTextSize(2);
     display.setTextColor(SSD1306_WHITE);
@@ -507,8 +503,7 @@ void drawTemperature2() {
     display.setTextSize(2);
     display.setTextColor(SSD1306_WHITE);
 
-    #ifdef Fahrenheit
-      if(Temperature2 > 100){
+    if(Temperature2 > 100){
         display.setCursor(70,48);
       } else {
         display.setCursor(98,48);
@@ -521,23 +516,11 @@ void drawTemperature2() {
       display.fillCircle(111, 50, 2, SSD1306_WHITE);
       display.fillCircle(111, 50, 1, SSD1306_BLACK);
       display.setCursor(116,48);
+    #ifdef Fahrenheit  
       display.print(F("F"));
     #endif
-
     #ifndef Fahrenheit
-      if(Temperature2 > 100){
-        display.setCursor(70,48);
-      } else {
-        display.setCursor(98,48);
-        display.print(TempFractionDisplay);
-        display.fillRect(94, 60, 2, 2, SSD1306_WHITE);  
-        display.setCursor(70,48);     
-      }
-      display.print(TempIntegerDisplay);
-      display.fillCircle(111, 50, 2, SSD1306_WHITE);
-      display.fillCircle(111, 50, 1, SSD1306_BLACK);
-      display.setCursor(116,48);
-      display.print(F("C"));
+       display.print(F("C"));
     #endif
   
 }
