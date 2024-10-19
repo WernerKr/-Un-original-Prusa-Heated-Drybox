@@ -15,12 +15,16 @@ Parts sold from Blurolls: processor ATmega328P (OldBootloader)
 ![With duct](https://github.com/user-attachments/assets/7fc5b59c-0aac-4b53-aea3-175a320b5d3d)
 ![Drybox_with_duct](https://github.com/user-attachments/assets/e4900aaa-83cf-4a48-a0a8-7c7a8acd7120)
 
+## 2024-10-15: Updated files (Serial_20241015.zip)
+Possibility to switch off the LED strip automatically at 60°C/140°F, 
+as the LED strips normally have a maximum operating temperature of 60°C. However, this requires a second Temp/Hum sensor.
+
 
 ## Final test:
-### New: two additional fans below the "duct" for much better air distribution
-### for Bracket Y, Beam A1, Beam A2, Beam A3, Beam A4, duct is now printed with Easy Nylon from Overture.
-### Heat resistance of PC blend is only 113°C/235°F, but over 120°C/248°F is achieved on Bracket Z and duct
-### Easy Nylon has a Heat resistance of 180°C/356°F
+#### New: two additional fans below the "duct" for much better air distribution
+#### for Bracket Y, Beam A1, Beam A2, Beam A3, Beam A4, duct is now printed with Easy Nylon from Overture.
+#### Heat resistance of PC blend is only 113°C/235°F, but over 120°C/248°F is achieved on Bracket Z and duct
+#### Easy Nylon has a Heat resistance of 180°C/356°F
 
 ![Fan 3and4](https://github.com/user-attachments/assets/1215fead-6184-4725-82ee-8169e7ac9c79)
 ![Fan 3and4_0](https://github.com/user-attachments/assets/e9687ef8-00eb-48ab-ae89-d33dd17284c8)
