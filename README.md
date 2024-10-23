@@ -30,6 +30,11 @@ as the LED strips normally have a maximum operating temperature of 60°C. Howeve
  - Graphics from Home Assistant and data from Shelly Plus Add-on and 3 sensors DS18B20 - measuring range -55 °C to +125 °C
    
 ![Drybox](https://github.com/user-attachments/assets/7c248dd5-6919-43ce-9f6e-be246d9c6c92)
+
+- T1 = Heating temperature
+- T2 = Temperature under heating/duct
+- T3 = Temperature front right (near door)
+
 ### Temperature curve without duct and without additional fans
 - The door was lifted slightly after about 1 hour for air exchange and closed again about 5 minutes before the end
 - Temperature reached 64.2 °C and 
