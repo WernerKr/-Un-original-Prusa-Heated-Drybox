@@ -19,8 +19,35 @@ Parts sold from Blurolls: processor ATmega328P (OldBootloader)
 Possibility to switch off the LED strip automatically at 60°C/140°F, 
 as the LED strips normally have a maximum operating temperature of 60°C. However, this requires a second Temp/Hum sensor.
 
+## Comparison with/without duct, with/without additional fans
+ #### Test environment: 
+ - Target temperature 70°C, 
+ - AutoOff after 240 minutes (4 hours), 
+ - two empty filament rolls in position 2 and position 4.
+ - Two front PTFE outlets always open for air exchange. 
+ - Overtemperature shutdown of the heater at 90°C, measurement on the floor below the heater/duct
+ - Measured with second temp/humidity sensor
+ - Graphics from Home Assistant and data from Shelly Plus Add-on and 3 sensors DS18B20 - measuring range -55 °C to +125 °C
+   
+![Drybox](https://github.com/user-attachments/assets/7c248dd5-6919-43ce-9f6e-be246d9c6c92)
+### Temperature curve without duct and without additional fans
+- The door was lifted slightly after about 1 hour for air exchange and closed again about 5 minutes before the end
+- Temperature reached 64.2 °C and 
+- temperature under heating 86.9 °C
+![Drybox_org_vx](https://github.com/user-attachments/assets/fbe044d5-2b1f-449c-95f4-13a9eeba6cf4)
+### Temperature curve with duct and without additional fan
+- The door was raised slightly after 5 minutes and was then raised the whole time for air exchange
+- Temperature reached 55.8 °C and 
+- temperature under duct 73.0 °C
+![Drybox_duct_vx](https://github.com/user-attachments/assets/70153dab-5545-4049-8793-a3df9838c742)
+### Temperature curve with duct and with two additional fans below duct
+- The door was lifted slightly after 5 minutes and was closed again 5 minutes before the end for air exchange
+- Temperature reached 60.2 °C and 
+- temperature under duct 71.5 °C
+![Drybox_fan_vx](https://github.com/user-attachments/assets/ab0df3cf-1e8f-4b73-882e-cd770c9685e8)
 
-## Final test:
+
+## Older test:
 #### New: two additional fans below the "duct" for much better air distribution
 #### for Bracket Y, Beam A1, Beam A2, Beam A3, Beam A4, duct is now printed with Easy Nylon from Overture.
 #### Heat resistance of PC blend is only 113°C/235°F, but over 120°C/248°F is achieved on Bracket Z and duct
