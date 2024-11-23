@@ -11,6 +11,8 @@ Parts sold from Blurolls: processor ATmega328P (OldBootloader)
 ![Heater_offF](https://github.com/user-attachments/assets/02681fed-7551-4cb5-92fd-f77afdf04b4e)
 ![TargetTempF](https://github.com/user-attachments/assets/f6c2219c-9765-45e8-b5a4-053db0204314)
 
+![AutoOff](https://github.com/user-attachments/assets/677255e3-7602-4d73-b343-3711d502cdc9)
+![AutoHum](https://github.com/user-attachments/assets/97c53ffc-8a5c-47c9-a0d7-6cbc97609373)
 
 ![With duct](https://github.com/user-attachments/assets/7fc5b59c-0aac-4b53-aea3-175a320b5d3d)
 ![Drybox_with_duct](https://github.com/user-attachments/assets/e4900aaa-83cf-4a48-a0a8-7c7a8acd7120)
