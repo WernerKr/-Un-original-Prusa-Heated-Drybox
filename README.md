@@ -17,6 +17,21 @@ Parts sold from Blurolls: processor ATmega328P (OldBootloader)
 ![With duct](https://github.com/user-attachments/assets/7fc5b59c-0aac-4b53-aea3-175a320b5d3d)
 ![Drybox_with_duct](https://github.com/user-attachments/assets/e4900aaa-83cf-4a48-a0a8-7c7a8acd7120)
 
+## 2024-11-25: Updated files (Serial_20241125.zip)
+ With AutoHum, the humidity difference has been reduced to 0.2% (previously 1.0% and 0.5%)
+ If the AutoHum function is set below 25%, the TargetTemp is raised to 55°C/131°F, otherwise this humidity is not achieved. 
+ The fan run-on time has been slightly reduced at temperatures above 55°C.
+
+Diagram description:
+ - At start-up TargetTemp = 50°C, AutoHum = 25%. The front door was still closed. 
+ - At around 9:45 the front door was lifted slightly to allow air to circulate. 
+ - At 10:30 the AutoHum value was reduced to 20%. Previously, the 25% was reached and regulated
+ - After the AutoHum value was not reached at the TargetTemp of 50°C, the TargetTemp was raised to 55°C shortly before 11:00. 
+ - With this setting the AutoHum value of 20% was then reached and regulated.
+![Drybox_Autohum1](https://github.com/user-attachments/assets/a764c59f-7bc4-4ee7-90cb-de73995ed401)
+![Drybox_Autohum2](https://github.com/user-attachments/assets/5d66c4ef-364b-4007-adcc-4243d6b0a0b7)
+
+
 ## 2024-10-15: Updated files (Serial_20241015.zip)
 Possibility to switch off the LED strip automatically at 60°C/140°F, 
 as the LED strips normally have a maximum operating temperature of 60°C. However, this requires a second Temp/Hum sensor.
