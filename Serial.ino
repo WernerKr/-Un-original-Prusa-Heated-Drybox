@@ -1,4 +1,4 @@
-/* 
+/* 25
 Code for the (Un)original Prusa Drybox Heater
 Written by Bram Elema, Creative Commons BY-NC-SA
 
@@ -8,7 +8,7 @@ and AutoHum Function
 and new Fan control, and Led Strip control
 If heater is set on, the data now updated each 5 sec otherwise 10 sec 
 The TargetTemp is now 50°C, the AutoHum ist now 25%
-Werner Krenn
+Werner Krenn - last modified 2024-11-25
 
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
@@ -74,7 +74,7 @@ int MinSet = 20;                          // min allowed setting TargetTemp °C
 int AutoOffTime = 360;                    // here 6 hours
 int MaxAutoOffTime = 2880;                // max 2 days
 int FanDelay = 300;                       // 300 seconds=5 minutes max 999 seconds because space Display
-int FanCor = 50;                          // >= 50°C TargetTemp add to Fandelay 120 sec
+int FanCor = 50;                          // >= 50°C TargetTemp add to Fandelay 60 or 90 sec
 int FanCor1 = 55;                         // all FanCor in °C - are later converted to Fahrenheit if set
 int FanCor2 = 60;
 //int FanCor3 = 65;
@@ -84,16 +84,17 @@ int FanCor02 = 35;
 int FanCor03 = 30;
 int FanCor04 = 25;
 
-int TargetHum = 30;
-int AutoHumValue = 30;
+int TargetHum = 25;
+int AutoHumValue = 25;
 int MaxHumSet = 65;                        // max allowed setting TargetHum
-int MinHumSet = 10;                        // min allowed setting TargetHum - but maybe will never be reached!
-bool HumOff = false;
+int MinHumSet = 10;
+float humDiff = 0.2;                       // diff between hum values on/off
+bool HumOff = false;                       // AutoHum trigger 
 
-int Max = 83;                             // overHeating Temp under the duct, need #overHeat = true and SecondTemp
+int Max = 85;                             // overHeating Temp under the duct, need #overHeat = true and SecondTemp
+int HeatMaxValue = 85;
 int HeatMax = 140;
 int HeatMin = 70;
-int HeatMaxValue = 83;
 
 float TemperatureCor = 0.0;               // correction Temperatur
 float HumidityCor = 0.0;                  // correction Humidity
@@ -237,14 +238,14 @@ void loop(){
 
     if (AutoHum == true) {
       unsigned long currentMillisHum = millis();
-      if (Humidity <= AutoHumValue - 0.5)
+      if (Humidity <= AutoHumValue - humDiff)
        { 
         digitalWrite(Heater, LOW); 
         HumOff = true;
         Hot = false;
         FanHumOn = true;
        }
-      if ((Humidity >= AutoHumValue + 1.0))
+      if ((Humidity >= AutoHumValue + humDiff))
        { 
         if (TempHigh == false)
         {
@@ -371,13 +372,13 @@ void loop(){
       previousMillis = currentMillis;
       display.clearDisplay();
       drawTargetTemperature();
-      if (TargetTemp >= FanCor04) { FanDelay = 120; FanValue = FanDelay;} 
-      if (TargetTemp >= FanCor03) { FanDelay = 180; FanValue = FanDelay;}
-      if (TargetTemp >= FanCor02) { FanDelay = 240; FanValue = FanDelay;}
-      if (TargetTemp >= FanCor01) { FanDelay = 300; FanValue = FanDelay;}
-      if (TargetTemp >= FanCor) { FanDelay = 420; FanValue = FanDelay;} 
-      if (TargetTemp >= FanCor1) { FanDelay = 540; FanValue = FanDelay;} 
-      if (TargetTemp >= FanCor2) { FanDelay = 660; FanValue = FanDelay;} 
+      if (TargetTemp >= FanCor04) { FanDelay = 60; FanValue = FanDelay;} 
+      if (TargetTemp >= FanCor03) { FanDelay = 120; FanValue = FanDelay;}
+      if (TargetTemp >= FanCor02) { FanDelay = 180; FanValue = FanDelay;}
+      if (TargetTemp >= FanCor01) { FanDelay = 240; FanValue = FanDelay;}
+      if (TargetTemp >= FanCor) { FanDelay = 300; FanValue = FanDelay;} 
+      if (TargetTemp >= FanCor1) { FanDelay = 420; FanValue = FanDelay;} 
+      if (TargetTemp >= FanCor2) { FanDelay = 570; FanValue = FanDelay;} 
       //if (TargetTemp >= FanCor3) { FanDelay = 780; FanValue = FanDelay;} 
       //if (TargetTemp >= FanCor4) { FanDelay = 900; FanValue = FanDelay;} 
      } 
@@ -425,13 +426,13 @@ void loop(){
       drawTargetTemperature();
       //if (TargetTemp < FanCor4) { FanDelay = 780; FanValue = FanDelay;}
       //if (TargetTemp < FanCor3) { FanDelay = 660; FanValue = FanDelay;}
-      if (TargetTemp < FanCor2) { FanDelay = 540; FanValue = FanDelay;}
-      if (TargetTemp < FanCor1) { FanDelay = 420; FanValue = FanDelay;}
-      if (TargetTemp < FanCor) { FanDelay = 300; FanValue = FanDelay;}
-      if (TargetTemp < FanCor01) { FanDelay = 240; FanValue = FanDelay;}
-      if (TargetTemp < FanCor02) { FanDelay = 180; FanValue = FanDelay;}
-      if (TargetTemp < FanCor03) { FanDelay = 120; FanValue = FanDelay;}
-      if (TargetTemp < FanCor04) { FanDelay = 60; FanValue = FanDelay;}
+      if (TargetTemp < FanCor2) { FanDelay = 420; FanValue = FanDelay;}
+      if (TargetTemp < FanCor1) { FanDelay = 300; FanValue = FanDelay;}
+      if (TargetTemp < FanCor) { FanDelay = 240; FanValue = FanDelay;}
+      if (TargetTemp < FanCor01) { FanDelay = 180; FanValue = FanDelay;}
+      if (TargetTemp < FanCor02) { FanDelay = 120; FanValue = FanDelay;}
+      if (TargetTemp < FanCor03) { FanDelay = 60; FanValue = FanDelay;}
+      if (TargetTemp < FanCor04) { FanDelay = 30; FanValue = FanDelay;}
      } 
      if (AutoOffSet == true)
       {
@@ -446,7 +447,25 @@ void loop(){
      {
        AutoHumValue = AutoHumValue - 1;
        if (AutoHumValue < MinHumSet)
-       { AutoHumValue = MinHumSet;}      
+       { AutoHumValue = MinHumSet;} 
+       if (AutoHumValue < 25)
+       {
+        #ifdef Fahrenheit
+         if (TargetTemp < 131) {
+            TargetTemp = 131;
+            FanDelay = 420; 
+            FanValue = FanDelay;
+         } 
+        #endif
+        #ifndef Fahrenheit
+         if (TargetTemp < 55) {
+            TargetTemp = 55;
+            FanDelay = 420; 
+            FanValue = FanDelay;
+         } 
+        #endif
+
+       }
        previousMillis = currentMillis;
        display.clearDisplay();
        drawAutoHum();
