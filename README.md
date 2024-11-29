@@ -179,6 +179,7 @@ Depends greatly on the temperature at the back in the middle on the floor (direc
 
 ### Main file = Serial.ino
 ![Arduino IDE](https://github.com/user-attachments/assets/ad56c513-1821-44f5-b948-361721efd630)
+![ARDUINO_pin_en](https://github.com/user-attachments/assets/5732b418-ba7c-47e0-9bc3-1c3d006dafbb)
 
 
 Support a second temperature/humidity sensor (DHT21 or DHT22)
