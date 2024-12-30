@@ -8,7 +8,8 @@ and AutoHum Function
 and new Fan control, and Led Strip control
 If heater is set on, the data now updated each 5 sec otherwise 10 sec 
 The TargetTemp is now 50°C, the AutoHum ist now 25%
-Werner Krenn - last modified 2024-11-25
+Update Display if Heating on is now 2 sec, tempDiff is now 0.1°C/0.18°F
+Werner Krenn - last modified 2024-12-11
 
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
@@ -45,11 +46,11 @@ REQUIRES the following Arduino libraries:
 //#define PC                           // Max = 123 °C	253
 //#define PA                           // Max = 143 °C	289
 
-// If an LED strip needs to be controlled 
+// If an LED strip needs to be controlled otherwise uncomment next line
 #define controlLed
 #define ControllLedAutooff            // Led on and Temperature >=60°C/140°F (= max. operating temperature LED strip) the led is switched off
 
-// if have attached a second temp/hum Sensor (dht22 or dht21) uncomment next line
+// if have not attached a second temp/hum Sensor (dht22 or dht21) uncomment next line
 #define SecondTemp                    // should be placed on the floor under the heater or duct
 
 #define DHT_PIN 9 // The Arduino Nano pin connected to DHT21/22 sensor
@@ -67,8 +68,9 @@ DFRobot_DHT20 dht20;
 DHT dht(DHT_PIN, DHT_TYPE);
 
 bool overHeat = true;                     // control overheating - only used if second temp/hum is available
-bool withDuct = true;                     // Duct installed -> Tempdiff = 0.2°C otherwise 0.5°C
+bool withDuct = true;                     // Duct installed -> Tempdiff = 0.1°C otherwise 0.3°C
 int TargetTemp = 50;
+int Refresh = 2000;                       // Update values in msec if heater is on (former 5000)
 int MaxSet = 70;                          // max allowed setting TargetTemp °C
 int MinSet = 20;                          // min allowed setting TargetTemp °C
 int AutoOffTime = 360;                    // here 6 hours
@@ -88,7 +90,7 @@ int TargetHum = 25;
 int AutoHumValue = 25;
 int MaxHumSet = 65;                        // max allowed setting TargetHum
 int MinHumSet = 10;
-float humDiff = 0.2;                       // diff between hum values on/off
+float humDiff = 0.1;                       // diff between hum values on/off
 bool HumOff = false;                       // AutoHum trigger 
 
 int Max = 85;                             // overHeating Temp under the duct, need #overHeat = true and SecondTemp
@@ -174,9 +176,9 @@ void setup(){
 
   if (withDuct == true)
   {
-   tempDiff = 0.2;
+   tempDiff = 0.1;
   } else {
-   tempDiff = 0.5;
+   tempDiff = 0.2;
   }
 
   #ifndef Fahrenheit
@@ -205,9 +207,9 @@ void setup(){
     char text[] = "°F"; 
    if (withDuct == true)
     {
-     tempDiff = 0.5;
+     tempDiff = 0.18;
     } else {
-     tempDiff = 1.0;
+     tempDiff = 0.36;
     } 
   #endif
 
@@ -486,7 +488,7 @@ void loop(){
      delay(200);
     }
 
-    if(currentMillis - previousMillis >= 5000) {     // Refreshes data on the display (every 5 seconds)
+    if(currentMillis - previousMillis >= Refresh) {     // Refreshes data on the display (every x mseconds)
       previousMillis = currentMillis;
       sensorUpdate();
 
