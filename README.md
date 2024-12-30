@@ -17,6 +17,24 @@ Parts sold from Blurolls: processor ATmega328P (OldBootloader)
 ![With duct](https://github.com/user-attachments/assets/7fc5b59c-0aac-4b53-aea3-175a320b5d3d)
 ![Drybox_with_duct](https://github.com/user-attachments/assets/e4900aaa-83cf-4a48-a0a8-7c7a8acd7120)
 
+## 2024-12-11: Updated files (Serial_20241211.zip)
+ - In heating mode, the update and query interval has been reduced to 2 seconds
+ - In addition, the temperature control difference was set to 0.1°C / 0.18°F and the humidity control difference (AutoHum) was set to 0.1% humidity.
+ - This results in much faster control behavior (Inspired by Sunlu S4)
+ - I am now using a modified duct, provided to me by @wbsp. Changes: 
+ - the outlet area at the bottom is 5 mm larger and the outlet at the side is 12 mm higher. 
+ - This allows for a much greater air flow. 
+![3D Druck_ 20241213_drybox1](https://github.com/user-attachments/assets/e2b94f60-664c-458e-883b-2db02e98c51f)
+![3D Druck_ 20241213_drybox_hum](https://github.com/user-attachments/assets/7f5f8fa8-3a3d-4e97-a6f2-916d0916e139)
+
+ ### Vergleich mit Sunlu S4
+ ![Sunlu_S4_Sensoren2](https://github.com/user-attachments/assets/376b4608-f2a4-4173-85eb-7406d9334076)
+ ![3D Druck_ 20241213_Sunlu_S4](https://github.com/user-attachments/assets/7c71dd73-0e3e-4558-a1b9-c8586d7f76ef)
+ ![3D Druck_ 20241213_Sunlu_S4_1](https://github.com/user-attachments/assets/87c6a775-a6a7-4e7d-83d3-6f022380f5db)
+ ![3D Druck_ 20241213_Sunlu_S4_0](https://github.com/user-attachments/assets/6bf77707-35b9-4efd-8d88-690311b0ef35)
+
+
+
 ## 2024-11-25: Updated files (Serial_20241125.zip)
  With AutoHum, the humidity difference has been reduced to 0.2% (previously 1.0% and 0.5%)
  If the AutoHum function is set below 25%, the TargetTemp is raised to 55°C/131°F, otherwise this humidity is not achieved. 
