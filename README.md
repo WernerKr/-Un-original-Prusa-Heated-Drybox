@@ -27,7 +27,7 @@ Parts sold from Blurolls: processor ATmega328P (OldBootloader)
 ![3D Druck_ 20241213_drybox1](https://github.com/user-attachments/assets/e2b94f60-664c-458e-883b-2db02e98c51f)
 ![3D Druck_ 20241213_drybox_hum](https://github.com/user-attachments/assets/7f5f8fa8-3a3d-4e97-a6f2-916d0916e139)
 
- ### Vergleich mit Sunlu S4
+ ### Comparison with Sunlu S4
  ![Sunlu_S4_Sensoren2](https://github.com/user-attachments/assets/376b4608-f2a4-4173-85eb-7406d9334076)
  ![3D Druck_ 20241213_Sunlu_S4](https://github.com/user-attachments/assets/7c71dd73-0e3e-4558-a1b9-c8586d7f76ef)
  ![3D Druck_ 20241213_Sunlu_S4_1](https://github.com/user-attachments/assets/87c6a775-a6a7-4e7d-83d3-6f022380f5db)
