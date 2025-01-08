@@ -37,7 +37,8 @@ REQUIRES the following Arduino libraries:
 
 #include <entities/HaEntitySwitch.h>
 #include <entities/HaEntityNumber.h>
-//#include <entities/HaEntityText.h>
+#include <entities/HaEntityText.h>
+#include <entities/HaEntityString.h>
 #include <entities/HaEntityTemperature.h>
 #include <entities/HaEntityHumidity.h>
 #ifdef ESP32
@@ -124,6 +125,7 @@ int FanCor01 = 40;
 int FanCor02 = 35;
 int FanCor03 = 30;
 int FanCor04 = 25;
+bool FanRun = false;
 
 int TargetHum = 25;
 int AutoHumValue = 25;
@@ -184,8 +186,8 @@ char MinuteDisplay[4];
 IJsonDocument _json_this_device_doc;
 void setupJsonForThisDevice() {
   _json_this_device_doc["identifiers"] = "my_hardware_" + std::string(mqtt_client_id);
-  _json_this_device_doc["name"] = "drybox";
-  _json_this_device_doc["sw_version"] = "2025-01-06";
+  _json_this_device_doc["name"] = "Drybox";
+  _json_this_device_doc["sw_version"] = "2025-01-08";
   _json_this_device_doc["model"] = "Arduino Nano ESP32-S3";
   _json_this_device_doc["manufacturer"] = "Werner Krenn";
 }
@@ -196,18 +198,33 @@ MQTTRemote _mqtt_remote(mqtt_client_id, mqtt_host, 1883, mqtt_username, mqtt_pas
 // See constructor of HaBridge for more documentation.
 HaBridge ha_bridge(_mqtt_remote, "drybox", _json_this_device_doc);
 
+HaEntityString _ha_entity_modetext(ha_bridge, "Mode", "drybox_modetxt");	//0=off, 1=on, 2=autooff, 3=autohum
 HaEntityNumber _ha_entity_mode(ha_bridge, "Mode", "drybox_mode");	//0=off, 1=on, 2=autooff, 3=autohum
 
 HaEntitySwitch _ha_entity_switch_heater(ha_bridge, "Switch Heater", "drybox_switch_heater");
 HaEntitySwitch _ha_entity_switch_fan(ha_bridge, "Switch Fan", "drybox_switch_fan");
 HaEntitySwitch _ha_entity_switch_led(ha_bridge, "Switch Led", "drybox_switch_led");
 
+#ifndef Fahrenheit
 HaEntityTemperature _ha_entity_temperature_target(ha_bridge, "Temperature Target", "drybox_temperature_target");
-HaEntityHumidity _ha_entity_humidity_target(ha_bridge, "Humidity Target", "drybox_humidity_target");
 HaEntityTemperature _ha_entity_temperature(ha_bridge, "Temperature", "drybox_temperature");
-HaEntityHumidity _ha_entity_humidity(ha_bridge, "Humidity", "drybox_humidity");
-
 HaEntityTemperature _ha_entity_temperature_2(ha_bridge, "Temperature 2", "drybox_temperature_2");
+#endif
+
+#ifdef Fahrenheit
+HaEntityTemperature _ha_entity_temperature_target(ha_bridge, "Temperature Target", "drybox_temperature_target",
+                                           HaEntityTemperature::Configuration{.unit = HaEntityTemperature::Unit::F,
+                                                                              .force_update = false});
+HaEntityTemperature _ha_entity_temperature(ha_bridge, "Temperature", "drybox_temperature",
+                                           HaEntityTemperature::Configuration{.unit = HaEntityTemperature::Unit::F,
+                                                                              .force_update = false});
+HaEntityTemperature _ha_entity_temperature_2(ha_bridge, "Temperature 2", "drybox_temperature_2",
+                                           HaEntityTemperature::Configuration{.unit = HaEntityTemperature::Unit::F,
+                                                                              .force_update = false});
+#endif
+
+HaEntityHumidity _ha_entity_humidity_target(ha_bridge, "Humidity Target", "drybox_humidity_target");
+HaEntityHumidity _ha_entity_humidity(ha_bridge, "Humidity", "drybox_humidity");
 HaEntityHumidity _ha_entity_humidity_2(ha_bridge, "Humidity 2", "drybox_humidity_2");
 
 bool _was_connected = false;
@@ -341,6 +358,7 @@ void loop(){
          if(Temperature < (TargetTemp - tempDiff))
          {
           digitalWrite(Fan, HIGH);
+          FanRun = true;
           //digitalWrite(Heater, HIGH);
           Hot = true;
          } 
@@ -353,6 +371,7 @@ void loop(){
        if (( FanHumOn == true) and ((currentMillisHum - FanHumOnpreviousMillis)/1000 >= FanDelay)) {     // Switch off Fan delay
        FanHumOn = false;
        digitalWrite(Fan, LOW);
+       FanRun = false;
        }
     }
 
@@ -438,6 +457,7 @@ void loop(){
       drawStatus();
       if (status == true) {
        digitalWrite(Fan, HIGH);
+       FanRun = true;
        FanOn = true;
       }
       if (not showSecondTemp){
@@ -622,6 +642,7 @@ void loop(){
     if((currentMillis - FanOnpreviousMillis)/1000 >= FanDelay) {     // Switch off Fan delay
       FanOn = false;
       digitalWrite(Fan, LOW);
+      FanRun = false;
       }
     }
 
@@ -630,6 +651,7 @@ void loop(){
       sensorUpdate();
       if (status == true) {
        digitalWrite(Fan, HIGH);
+       FanRun = true;
        FanOn = true;
       }
       display.clearDisplay();

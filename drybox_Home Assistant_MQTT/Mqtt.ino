@@ -6,6 +6,7 @@ void mqtt(){
     // Publish Home Assistant Configuration for the sensors once connected to MQTT.
  
     _ha_entity_mode.publishConfiguration();
+    _ha_entity_modetext.publishConfiguration();
 
     _ha_entity_switch_heater.publishConfiguration();
     _ha_entity_switch_fan.publishConfiguration();
@@ -30,19 +31,35 @@ void mqtt(){
 
     if (status == false)
     {   
-    _ha_entity_mode.publishNumber(0);
+     _ha_entity_mode.publishNumber(0);
+     _ha_entity_modetext.publishString("Off", {{"attr1", "Off"}});
     }
     else
     {
-    if (AutoOff == true) { _ha_entity_mode.publishNumber(2); }
-    else
-    if (AutoHum == true) { _ha_entity_mode.publishNumber(3); }
-    else
-    { _ha_entity_mode.publishNumber(1); }
+    if (AutoOff == true) 
+    { 
+     _ha_entity_mode.publishNumber(2);
+     //String Minuten = String(AutoOffTimeValue);
+     char s1[20]="AutoOff ";
+     dtostrf(AutoOffTimeValue, 4, 0, MinuteDisplay);
+     strcat(s1,MinuteDisplay);
+     _ha_entity_modetext.publishString(s1, {{"attr1", "AutoOff"}, {"attr2", AutoOffTimeValue}});  //AutoOffTimeValue
     }
+    else
+    if (AutoHum == true) 
+    { 
+     _ha_entity_mode.publishNumber(3);
+     _ha_entity_modetext.publishString("AutoHum", {{"attr1", "AutoHum"}});
+    }
+    else
+    { 
+     _ha_entity_mode.publishNumber(1);
+     _ha_entity_modetext.publishString("On", {{"attr1", "On"}});
+    }
+  } 
 
     _ha_entity_switch_heater.publishSwitch(Hot);
-    _ha_entity_switch_fan.publishSwitch(FanOn);
+    _ha_entity_switch_fan.publishSwitch(FanRun);
     _ha_entity_switch_led.publishSwitch(LedOn);
 
     _ha_entity_temperature_target.publishTemperature(TargetTemp);
