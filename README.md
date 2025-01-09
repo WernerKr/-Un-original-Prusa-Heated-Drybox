@@ -4,6 +4,10 @@ Required processor Arduino Nano ESP32-S3, is pin compatible with the Arduino Nan
 with the exception that the 5V pin only supplies a voltage when USB is connected. 
 Therefore, no more 5V is taken from this pin.
 
+For Johboh/HomeAssistantEntities you need >= 7.0.8, supports 
+state_class:measurement;
+which is needed for History Graphic 
+
 ![Home Assistant](https://github.com/user-attachments/assets/1bd42809-0463-4e9a-9c2c-450904f3fe8c)
 
 
