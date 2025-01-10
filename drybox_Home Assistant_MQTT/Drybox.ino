@@ -6,10 +6,10 @@ Added support for a second temp/hum Sensor DHT21 or DHT22
 and AutoOff Function 
 and AutoHum Function
 and new Fan control, and Led Strip control
-If heater is set on, the data now updated each 5 sec otherwise 10 sec 
+If heater is set on, the data now updated each 2 sec otherwise 10 sec 
 The TargetTemp is now 50°C, the AutoHum ist now 25%
 Update Display if Heating on is now 2 sec, tempDiff is now 0.1°C/0.18°F
-Werner Krenn - last modified 2025-01-06
+Werner Krenn - last modified 2025-01-10
 
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
@@ -55,6 +55,11 @@ REQUIRES the following Arduino libraries:
 #include <DFRobot_DHT20.h>
 #include <SPI.h>
 #include <Wire.h>
+
+//#define DS18B20			//DallasTemperature
+#ifdef DS18B20
+//#include <DallasTemperature.h>
+#endif
 
 #include "arduino_settings.h"
 
@@ -131,7 +136,7 @@ int TargetHum = 25;
 int AutoHumValue = 25;
 int MaxHumSet = 65;                        // max allowed setting TargetHum
 int MinHumSet = 10;
-float humDiff = 0.1;                       // diff between hum values on/off
+float humDiff = 0.2;                       // diff between hum values on/off
 bool HumOff = false;                       // AutoHum trigger 
 
 int Max = 85;                             // overHeating Temp under the duct, need #overHeat = true and SecondTemp
@@ -187,7 +192,7 @@ IJsonDocument _json_this_device_doc;
 void setupJsonForThisDevice() {
   _json_this_device_doc["identifiers"] = "my_hardware_" + std::string(mqtt_client_id);
   _json_this_device_doc["name"] = "Drybox";
-  _json_this_device_doc["sw_version"] = "2025-01-08";
+  _json_this_device_doc["sw_version"] = "2025-01-10";
   _json_this_device_doc["model"] = "Arduino Nano ESP32-S3";
   _json_this_device_doc["manufacturer"] = "Werner Krenn";
 }
@@ -373,6 +378,11 @@ void loop(){
        digitalWrite(Fan, LOW);
        FanRun = false;
        }
+      if ( (Hot == false) and (FanValue <=0)){
+        digitalWrite(Fan, LOW);
+        FanRun = false;
+      }
+
     }
 
     if((digitalRead(Button2) == LOW) and (digitalRead(Button1) == LOW))
@@ -559,7 +569,7 @@ void loop(){
        AutoHumValue = AutoHumValue - 1;
        if (AutoHumValue < MinHumSet)
        { AutoHumValue = MinHumSet;} 
-       if (AutoHumValue < 25)
+       if (AutoHumValue < 23)
        {
         #ifdef Fahrenheit
          if (TargetTemp < 131) {
