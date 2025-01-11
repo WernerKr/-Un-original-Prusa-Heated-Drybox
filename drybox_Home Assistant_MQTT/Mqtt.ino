@@ -39,22 +39,30 @@ void mqtt(){
     if (AutoOff == true) 
     { 
      _ha_entity_mode.publishNumber(2);
-     //String Minuten = String(AutoOffTimeValue);
-     char s1[20]="AutoOff ";
+     char s1[25]="AutoOff ";
      dtostrf(AutoOffTimeValue, 4, 0, MinuteDisplay);
      strcat(s1,MinuteDisplay);
+     strcat(s1,"min");     
      _ha_entity_modetext.publishString(s1, {{"attr1", "AutoOff"}, {"attr2", AutoOffTimeValue}});  //AutoOffTimeValue
     }
     else
     if (AutoHum == true) 
     { 
      _ha_entity_mode.publishNumber(3);
-     _ha_entity_modetext.publishString("AutoHum", {{"attr1", "AutoHum"}});
+     char s1[20]="AutoHum ";     
+     dtostrf(AutoHumValue, 2, 0, MinuteDisplay);
+     strcat(s1,MinuteDisplay); 
+     strcat(s1,"%");    
+     _ha_entity_modetext.publishString(s1, {{"attr1", "AutoHum"}});
     }
     else
     { 
      _ha_entity_mode.publishNumber(1);
-     _ha_entity_modetext.publishString("On", {{"attr1", "On"}});
+     char s1[20]="On ";     
+     dtostrf(TargetTemp, 2, 0, MinuteDisplay);
+     strcat(s1,MinuteDisplay); 
+     strcat(s1,text);    
+     _ha_entity_modetext.publishString(s1, {{"attr1", "On"}});
     }
   } 
 

@@ -9,7 +9,7 @@ and new Fan control, and Led Strip control
 If heater is set on, the data now updated each 2 sec otherwise 10 sec 
 The TargetTemp is now 50°C, the AutoHum ist now 25%
 Update Display if Heating on is now 2 sec, tempDiff is now 0.1°C/0.18°F
-Werner Krenn - last modified 2025-01-10
+Werner Krenn - last modified 2025-01-11
 
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
@@ -192,7 +192,7 @@ IJsonDocument _json_this_device_doc;
 void setupJsonForThisDevice() {
   _json_this_device_doc["identifiers"] = "my_hardware_" + std::string(mqtt_client_id);
   _json_this_device_doc["name"] = "Drybox";
-  _json_this_device_doc["sw_version"] = "2025-01-10";
+  _json_this_device_doc["sw_version"] = "2025-01-11";
   _json_this_device_doc["model"] = "Arduino Nano ESP32-S3";
   _json_this_device_doc["manufacturer"] = "Werner Krenn";
 }
