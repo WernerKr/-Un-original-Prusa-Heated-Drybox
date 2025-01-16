@@ -7,6 +7,25 @@ Therefore, no more 5V is taken from this pin.
 For Johboh/HomeAssistantEntities you need >= 7.0.8, supports 
 state_class:measurement;
 which is needed for History Graphic 
+- The former PIN D4 for Led is now D3. 
+- The DS18B20 data works only with PIN D4.
+- But to use it, the GPIO pin = 7 for D4 must be set.
+- To connect the DS18B20 temperature sensors (3 are supported in the program code) a 4.7 KOhm resistor must be used between pin D4 and Vin (=5V). All data lines of the DS18B20 are connected to pin D4 at the same time.
+#### All user settings are now stored in the file arduino_settings.h.
+- #define debug
+- #define showFraction
+- #define controlLed
+- #define ControllLedAutooff
+- #define SecondTemp
+- #define HomeAssistant	
+- security and lan settings for Home Assistant
+- #define DS18B20xx
+- #define DS18B20HA
+- #define DallasAdrSet
+- #define DallasSensor1
+- #define DallasSensor2
+- #define DallasSensor3
+- all other settings (targetTemp, targetHum ...)
 
 ![Home Assistant](https://github.com/user-attachments/assets/1bd42809-0463-4e9a-9c2c-450904f3fe8c)
 
