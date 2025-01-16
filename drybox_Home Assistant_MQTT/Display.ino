@@ -495,15 +495,31 @@ void drawHumidity1() {
 }
 
 void drawTemperature2() {
-    int TempInteger = int(Temperature2);
-    int TempFraction = int((Temperature2-TempInteger)*10);
+  #ifdef DS18B20xx
+   #ifdef DallasSensor3
+    if (TempSensor == 3) { TempVal = sensor3val; }
+   #endif
+   #ifdef DallasSensor2  
+    if (TempSensor == 2) { TempVal = sensor2val; }
+   #endif
+   #ifdef DallasSensor1  
+     if (TempSensor == 1) { TempVal = sensor1val; }
+   #endif 
+    if (TempSensor == 0) { TempVal = Temperature2; }    
+  #endif
+  #ifndef DS18B20xx
+    TempVal = Temperature2;
+  #endif 
+
+    int TempInteger = int(TempVal);
+    int TempFraction = int((TempVal-TempInteger)*10);
     dtostrf(TempInteger, 2, 0, TempIntegerDisplay);
     dtostrf(TempFraction, 1, 0, TempFractionDisplay);
 
     display.setTextSize(2);
     display.setTextColor(SSD1306_WHITE);
 
-    if(Temperature2 > 100){
+    if (TempVal > 100){
         display.setCursor(70,48);
       } else {
         display.setCursor(98,48);
@@ -527,6 +543,23 @@ void drawTemperature2() {
 
 
 void drawHumidity2() {
+   #ifdef DS18B20xx
+   #ifdef DallasSensor3
+    if (TempSensor == 3) { TempVal = 3; }
+   #endif
+   #ifdef DallasSensor2  
+    if (TempSensor == 2) { TempVal = 2; }
+   #endif
+   #ifdef DallasSensor1  
+     if (TempSensor == 1) { TempVal = 1; }
+   #endif 
+    if (TempSensor == 0) { TempVal = 0; }    
+  #endif
+  #ifndef DS18B20xx
+    TempVal = 0;
+  #endif 
+
+   if (TempVal == 0){
     int HumInteger = int(Humidity2);
     int HumFraction = int((Humidity2-HumInteger)*10);
     dtostrf(HumInteger, 2, 0, HumIntegerDisplay);
@@ -542,7 +575,16 @@ void drawHumidity2() {
     display.println(F("%"));
 
     display.fillRect(26, 60, 2, 2, SSD1306_WHITE);
-  
+   }
+   else
+   {
+    dtostrf(TempVal, 2, 0, HumIntegerDisplay);
+    display.setTextColor(SSD1306_WHITE);
+    display.setCursor(12,48);
+    display.print(HumIntegerDisplay);
+
+   }
+
 }
 
 void drawTargetTemperature() {
