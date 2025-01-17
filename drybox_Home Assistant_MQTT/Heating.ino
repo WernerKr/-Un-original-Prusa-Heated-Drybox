@@ -50,7 +50,7 @@ void sensorUpdate(){
   #ifdef DallasAdrSet
    sensor1val = sensors.getTempC(sensor1);
   #endif
-  if (sensor1val <= 0){
+  if ((sensor1val <= 0) or (sensor1val == 85.00))  {
     sensor1val  = 0;
   }
     #ifdef Fahrenheit
@@ -66,7 +66,7 @@ void sensorUpdate(){
   #ifdef DallasAdrSet
    sensor2val = sensors.getTempC(sensor2);
   #endif
-  if (sensor2val <= 0){
+  if ((sensor2val <= 0)  or (sensor2val == 85.00)){
     sensor2val  = 0;
   }  
     #ifdef Fahrenheit
@@ -82,7 +82,7 @@ void sensorUpdate(){
   #ifdef DallasAdrSet
    sensor3val = sensors.getTempC(sensor3);
   #endif
-  if (sensor3val <= 0){
+  if ((sensor3val <= 0) or (sensor3val == 85.00)){
     sensor3val  = 0;
   }  
     #ifdef Fahrenheit

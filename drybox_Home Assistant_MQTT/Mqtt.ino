@@ -84,7 +84,6 @@ void mqtt(){
      _ha_entity_modetext.publishString(s1, {{"attr1", "On"}});
     }
   } 
-
     _ha_entity_switch_heater.publishSwitch(Hot);
     _ha_entity_switch_fan.publishSwitch(FanRun);
     

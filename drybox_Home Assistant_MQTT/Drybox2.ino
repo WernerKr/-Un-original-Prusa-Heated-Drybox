@@ -11,7 +11,7 @@ The TargetTemp is now 50°C, the AutoHum ist now 25%
 Update Display if Heating on is now 2 sec, tempDiff is now 0.1°C/0.18°F
 Caution! Led Pin is now 3 (was former 4) 
          Becaise DS18B20 works for me only on PIN 4 = GPIO7 !!
-Werner Krenn - last modified 2025-01-14
+Werner Krenn - last modified 2025-01-17
 
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
@@ -26,6 +26,7 @@ REQUIRES the following Arduino libraries:
  - 
 */
 #include <Arduino.h>
+char swversion[12] = "2024-01-17";
 // This is for the Arduino IDE, where we always build with ArduinoJson. arduino-cli will not build/include libraries
 // that are not included anywhere. So we must include ArduinoJson.h so its available for IJson.h later.
 // For Platform IO, this is not the case and these examples are built both with ArduinoJson and nlohmann-json.
@@ -186,7 +187,7 @@ IJsonDocument _json_this_device_doc;
 void setupJsonForThisDevice() {
   _json_this_device_doc["identifiers"] = "my_hardware_" + std::string(mqtt_client_id);
   _json_this_device_doc["name"] = "Drybox2";
-  _json_this_device_doc["sw_version"] = "2025-01-16";
+  _json_this_device_doc["sw_version"] = swversion;
   _json_this_device_doc["model"] = "Arduino Nano ESP32-S3";
   _json_this_device_doc["manufacturer"] = "Werner Krenn";
 }
@@ -384,6 +385,7 @@ void setup(){
     12 Bit: 0,0625 °C
    */
    delay(1000);
+   sensors.requestTemperatures(); 
 
    Serial.println("Locating devices...");
    Serial.print("Found ");
@@ -717,7 +719,7 @@ void loop(){
     AutoOffSet = false;
     AutoOffTimeValue = AutoOffTime;
     digitalWrite(Heater, LOW);
-    
+    Hot = false;
     if (FanOn == true)
     {   
     FanValue = FanDelay - ((currentMillis - FanOnpreviousMillis)/1000);  
