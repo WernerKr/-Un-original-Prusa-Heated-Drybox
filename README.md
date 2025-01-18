@@ -33,6 +33,9 @@ which is needed for History Graphic
 
 ![HA_drybox_graph](https://github.com/user-attachments/assets/67c3691f-dd2e-43b1-ae88-55aabc3eaedd)
 
+![drybox_ds18b20](https://github.com/user-attachments/assets/ce23b215-cf97-493e-a44c-b3655e848971)
+
+
 
 
 
