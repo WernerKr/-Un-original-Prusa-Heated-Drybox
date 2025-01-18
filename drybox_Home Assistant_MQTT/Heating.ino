@@ -103,13 +103,21 @@ void heater(){
     {
       if ((AutoHum == false) or ((AutoHum == true) and (HumOff == false)))
       digitalWrite(Heater, HIGH);            // Turns heating element on if more than 0.2 of 0.5 degrees celcius under the target temperature
+      if ((AutoHum == true) and (FanHumOn == true))
+      { 
       digitalWrite(Fan, HIGH);
+      }
+      else { digitalWrite(Fan, HIGH); }
       FanRun = true;
       Hot = true;
     } 
     if ((Temperature > (TargetTemp + tempDiff)) or ((AutoHum == true) and (HumOff == true ))){      // Turns heating element off if more than 0.2 or 0.5 degrees celcius over the target temperature
       digitalWrite(Heater, LOW);
-      Hot = false;      
+      Hot = false;  
+      if ((AutoHum == true) and (FanValue <=0)) {
+       digitalWrite(Fan, LOW);
+       FanRun = false; 
+      }   
     } 
   }
   else { digitalWrite(Heater, LOW); }

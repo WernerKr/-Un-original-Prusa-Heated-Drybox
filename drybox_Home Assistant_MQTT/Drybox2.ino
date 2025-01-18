@@ -11,7 +11,7 @@ The TargetTemp is now 50°C, the AutoHum ist now 25%
 Update Display if Heating on is now 2 sec, tempDiff is now 0.1°C/0.18°F
 Caution! Led Pin is now 3 (was former 4) 
          Becaise DS18B20 works for me only on PIN 4 = GPIO7 !!
-Werner Krenn - last modified 2025-01-17
+Werner Krenn - last modified 2025-01-18
 
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
@@ -26,13 +26,17 @@ REQUIRES the following Arduino libraries:
  - 
 */
 #include <Arduino.h>
-char swversion[12] = "2024-01-17";
+char swversion[12] = "2024-01-18";
 // This is for the Arduino IDE, where we always build with ArduinoJson. arduino-cli will not build/include libraries
 // that are not included anywhere. So we must include ArduinoJson.h so its available for IJson.h later.
 // For Platform IO, this is not the case and these examples are built both with ArduinoJson and nlohmann-json.
 
 
 #include "arduino_settings.h"
+
+#include <esp_task_wdt.h>
+#define WDT_TIMEOUT 20 
+esp_err_t ESP32_ERROR;
 
 #ifndef PLATFORMIO
 #include <ArduinoJson.h>
@@ -83,8 +87,8 @@ float tempC;
 
 #endif
 
-const char wifi_ssid[] = WIFI_SSID;    	// your network SSID (name)
-const char wifi_password[] = WIFI_PASS;    	// your network password (use for WPA, or use as key for WEP)
+const char wifi_ssid[] = WIFI_SSID; 
+const char wifi_password[] = WIFI_PASS; 
 const char mqtt_client_id[] = MQTT_ID;
 const char mqtt_host[] = MQTT_HOST;
 const char mqtt_username[] = MQTT_USER;
@@ -186,7 +190,7 @@ char MinuteDisplay[4];
 IJsonDocument _json_this_device_doc;
 void setupJsonForThisDevice() {
   _json_this_device_doc["identifiers"] = "my_hardware_" + std::string(mqtt_client_id);
-  _json_this_device_doc["name"] = "Drybox2";
+  _json_this_device_doc["name"] = HAname;
   _json_this_device_doc["sw_version"] = swversion;
   _json_this_device_doc["model"] = "Arduino Nano ESP32-S3";
   _json_this_device_doc["manufacturer"] = "Werner Krenn";
@@ -196,7 +200,7 @@ MQTTRemote _mqtt_remote(mqtt_client_id, mqtt_host, 1883, mqtt_username, mqtt_pas
 // Create the Home Assistant bridge. This is shared across all entities.
 // We only have one per device/hardware. In our example, the name of our device is "drybox".
 // See constructor of HaBridge for more documentation.
-HaBridge ha_bridge(_mqtt_remote, "drybox2", _json_this_device_doc);
+HaBridge ha_bridge(_mqtt_remote, HAnamelower, _json_this_device_doc);
 
 HaEntityString _ha_entity_modetext(ha_bridge, "Mode", "drybox_modetxt");	//0=off, 1=on, 2=autooff, 3=autohum
 HaEntityNumber _ha_entity_mode(ha_bridge, "Mode", "drybox_mode");	//0=off, 1=on, 2=autooff, 3=autohum
@@ -266,7 +270,7 @@ HaEntityHumidity _ha_entity_humidity_2(ha_bridge, "Humidity 2", "drybox_humidity
 
 bool _was_connected = false;
 unsigned long _last_publish_ms = 0;
-
+int iCount = 0; 
 
 
 void setup(){
@@ -396,6 +400,25 @@ void setup(){
 
   #endif
 
+#ifdef WATCHDOG
+  Serial.println("ESP started ...");            //Say hello to the world
+  esp_task_wdt_deinit();
+  esp_task_wdt_config_t wdt_config = {
+    .timeout_ms = WDT_TIMEOUT * 1000,                 // Convertin ms
+    .idle_core_mask = (1 << portNUM_PROCESSORS) - 1,  // Bitmask of all cores, https://github.com/espressif/esp-idf/blob/v5.2.2/examples/system/task_watchdog/main/task_watchdog_example_main.c
+    .trigger_panic = false                             // ... ?Enable panic to restart ESP32
+  };
+  // WDT Init
+  ESP32_ERROR = esp_task_wdt_init(&wdt_config);
+   Serial.println("Last Reset : " + String(esp_err_to_name(ESP32_ERROR)));
+   esp_task_wdt_add(NULL);  //add current thread to WDT watch
+
+   //Serial.println(" Resetting WDT...");
+   //esp_task_wdt_reset();
+   // Serial.println("Disable watchdog");   //Write information to serial monitor
+   // esp_task_wdt_deinit();                // Disable watchdog
+#endif
+
   drawLogo();
   delay(2000); 
   sensorUpdate();
@@ -418,43 +441,43 @@ void loop(){
      }
   }   
 
-    if (AutoHum == true) {
-      unsigned long currentMillisHum = millis();
-      if (Humidity <= AutoHumValue - humDiff)
-       { 
+  if (AutoHum == true) {
+     unsigned long currentMillisHum = millis();
+     if (Humidity <= AutoHumValue - humDiff)
+     { 
         digitalWrite(Heater, LOW); 
         HumOff = true;
         Hot = false;
         FanHumOn = true;
-       }
-      if ((Humidity >= AutoHumValue + humDiff))
-       { 
+     }
+     if ((Humidity >= AutoHumValue + humDiff))
+     { 
         if (TempHigh == false)
         {
-         if(Temperature < (TargetTemp - tempDiff))
-         {
-          digitalWrite(Fan, HIGH);
-          FanRun = true;
-          //digitalWrite(Heater, HIGH);
-          Hot = true;
-         } 
+          if(Temperature < (TargetTemp - tempDiff))
+          {
+            digitalWrite(Fan, HIGH);
+            FanRun = true;
+            Hot = true;
+          } 
         } 
         HumOff = false;
         FanHumOn = false;
-       }
-       if (HumOff == false) {FanHumOnpreviousMillis = currentMillisHum; }
-       if (FanHumOn == true) {FanValue = FanDelay - ((currentMillisHum - FanHumOnpreviousMillis)/1000);}
-       if (( FanHumOn == true) and ((currentMillisHum - FanHumOnpreviousMillis)/1000 >= FanDelay)) {     // Switch off Fan delay
-       FanHumOn = false;
-       digitalWrite(Fan, LOW);
-       FanRun = false;
-       }
-      if ( (Hot == false) and (FanValue <=0)){
+     }
+
+     if (HumOff == false) {FanHumOnpreviousMillis = currentMillisHum; }
+     if (FanHumOn == true) {FanValue = FanDelay - ((currentMillisHum - FanHumOnpreviousMillis)/1000);}
+     if (( FanHumOn == true) and ((currentMillisHum - FanHumOnpreviousMillis)/1000 >= FanDelay)) {     // Switch off Fan delay
+        FanHumOn = false;
         digitalWrite(Fan, LOW);
         FanRun = false;
-      }
+     }
+     if ( (Hot == false) and (FanValue <=0)){
+        digitalWrite(Fan, LOW);
+        FanRun = false;
+     }
 
-    }
+  }
 
     if((digitalRead(Button2) == LOW) and (digitalRead(Button1) == LOW))
     {  
@@ -709,6 +732,11 @@ void loop(){
   #ifdef HomeAssistant
    mqtt();
   #endif
+  
+  #ifdef WATCHDOG
+   esp_task_wdt_reset();
+   delay(1); 
+  #endif 
 
   }
 
@@ -910,7 +938,10 @@ void loop(){
 
     }
     #endif
-
+  #ifdef WATCHDOG
+   esp_task_wdt_reset();
+   delay(1); 
+  #endif 
   }
 }
 

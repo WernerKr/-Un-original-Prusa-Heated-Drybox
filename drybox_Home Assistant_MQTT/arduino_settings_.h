@@ -12,14 +12,23 @@
 // if have not attached a second temp/hum Sensor (dht22 or dht21) uncomment next line
 #define SecondTemp                    // should be placed on the floor under the heater or duct
 
+#define WATCHDOG
+
 //#define HomeAssistant		// send data to Homee Assistant
 
-#define WIFI_SSID "FRITZ!Box"
-#define WIFI_PASS "????????????????????"
+#ifdef HomeAssistant
+
+char HAname[12] = "Drybox2";
+char HAnamelower[12] = "drybox2";
+
 #define MQTT_ID "DryBox2"
+#define WIFI_SSID "FRITZ!Box"		// your network SSID (name)
+#define WIFI_PASS "????????????????????"	// your network password (use for WPA, or use as key for WEP)
 #define MQTT_HOST "192.168.0.??"
 #define MQTT_USER "Name"
 #define MQTT_PASS "Password"
+
+#endif
 
 //#define DS18B20xx		// also support and show DS18B20 temperature sensors
 
