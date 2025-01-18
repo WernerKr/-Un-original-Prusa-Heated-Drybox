@@ -29,6 +29,12 @@ which is needed for History Graphic
 
 ![Home Assistant](https://github.com/user-attachments/assets/1bd42809-0463-4e9a-9c2c-450904f3fe8c)
 
+### DryBox Home Assitant Graph
+
+![HA_drybox_graph](https://github.com/user-attachments/assets/67c3691f-dd2e-43b1-ae88-55aabc3eaedd)
+
+
+
 
 # -Un-original-Prusa-Heated-Drybox Code for Ardunio (Nano) 
 https://www.printables.com/de/model/883817-unoriginal-prusa-heated-drybox
