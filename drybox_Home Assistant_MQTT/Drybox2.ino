@@ -26,7 +26,7 @@ REQUIRES the following Arduino libraries:
  - 
 */
 #include <Arduino.h>
-char swversion[12] = "2024-01-18";
+char swversion[12] = "2024-01-19";
 // This is for the Arduino IDE, where we always build with ArduinoJson. arduino-cli will not build/include libraries
 // that are not included anywhere. So we must include ArduinoJson.h so its available for IJson.h later.
 // For Platform IO, this is not the case and these examples are built both with ArduinoJson and nlohmann-json.
@@ -100,15 +100,15 @@ const char mqtt_password[] = MQTT_PASS;
 #define Heater 10
 #define Fan 5
 
-#define Led 3
-/*
+//#define Led 3
+
 #ifdef DS18B20xx
  #define Led 3
 #endif
 #ifndef DS18B20xx
  #define Led 4
 #endif
-*/
+
 
 //#define PETG                         // Max = 73 °C	163
 //#define ABS                          // Max = 83 °C	181
@@ -284,6 +284,8 @@ void setup(){
   pinMode(Heater, OUTPUT);
   pinMode(Fan, OUTPUT);
   pinMode(Led, OUTPUT);
+  pinMode(LED_BLUE, OUTPUT);
+  //pinMode(LED_BUILTIN, OUTPUT);
 
   #ifdef SecondTemp
     dht.begin(); // initialize the sensor
@@ -406,7 +408,7 @@ void setup(){
   esp_task_wdt_config_t wdt_config = {
     .timeout_ms = WDT_TIMEOUT * 1000,                 // Convertin ms
     .idle_core_mask = (1 << portNUM_PROCESSORS) - 1,  // Bitmask of all cores, https://github.com/espressif/esp-idf/blob/v5.2.2/examples/system/task_watchdog/main/task_watchdog_example_main.c
-    .trigger_panic = false                             // ... ?Enable panic to restart ESP32
+    .trigger_panic = true                             // ... ?Enable panic to restart ESP32
   };
   // WDT Init
   ESP32_ERROR = esp_task_wdt_init(&wdt_config);
@@ -419,6 +421,7 @@ void setup(){
    // esp_task_wdt_deinit();                // Disable watchdog
 #endif
 
+  digitalWrite(LED_BLUE, HIGH);
   drawLogo();
   delay(2000); 
   sensorUpdate();

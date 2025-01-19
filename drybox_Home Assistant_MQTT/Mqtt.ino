@@ -1,4 +1,5 @@
 void mqtt(){
+
   _mqtt_remote.handle();
 
   auto connected = _mqtt_remote.connected();
@@ -47,7 +48,7 @@ void mqtt(){
   // Publish temperature and brightness status every 10 seconds.
   auto now = millis();
   if (now - _last_publish_ms >= 10000) {
-
+  digitalWrite(LED_BLUE, LOW);
     if (status == false)
     {   
      _ha_entity_mode.publishNumber(0);
@@ -121,5 +122,7 @@ void mqtt(){
 
   #endif
     _last_publish_ms = now;
+     digitalWrite(LED_BLUE, HIGH);
   }
+  
 }
