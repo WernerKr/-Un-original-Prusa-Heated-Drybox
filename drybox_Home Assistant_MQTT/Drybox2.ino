@@ -10,23 +10,29 @@ If heater is set on, the data now updated each 2 sec otherwise 10 sec
 The TargetTemp is now 50°C, the AutoHum ist now 25%
 Update Display if Heating on is now 2 sec, tempDiff is now 0.1°C/0.18°F
 Caution! Led Pin is now 3 (was former 4) 
-         Becaise DS18B20 works for me only on PIN 4 = GPIO7 !!
-Werner Krenn - last modified 2025-01-18
+         because DS18B20 works for me only on PIN 4 = GPIO7 !!
+Werner Krenn - last modified 2025-01-21
 
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
  - Adafruit_SSD1306 Library: https://github.com/adafruit/Adafruit_SSD1306
  - DFRobot_DHT20 Sensor Library: https://github.com/DFRobot/DFRobot_DHT20
  - DHT_sensor_library Library: https://github.com/adafruit/DHT-sensor-library
+ - OneWire
+ Arduino Nano ESP32:
+ - Arduino ESP32
+ - ESP32 core v3.x.x
  HA MQTT:
- - ESP32 core v3.0.3
  - ArduinoJson https://arduinojson.org/?utm_source=meta&utm_medium=library.properties
- - MQTTRemote 
+ - MQTTRemote
+ - MQTT 
  - HomeAssistantEntities https://github.com/Johboh/HomeAssistantEntities
- - 
+ DS18B20 Temperature Sensor:
+ - DallasTemperature
 */
+
 #include <Arduino.h>
-char swversion[12] = "2024-01-19";
+char swversion[12] = "2024-01-21";
 // This is for the Arduino IDE, where we always build with ArduinoJson. arduino-cli will not build/include libraries
 // that are not included anywhere. So we must include ArduinoJson.h so its available for IJson.h later.
 // For Platform IO, this is not the case and these examples are built both with ArduinoJson and nlohmann-json.
