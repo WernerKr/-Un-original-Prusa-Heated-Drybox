@@ -1,5 +1,6 @@
 void mqtt(){
 
+ #ifdef HomeAssistant
   _mqtt_remote.handle();
 
   auto connected = _mqtt_remote.connected();
@@ -51,14 +52,14 @@ void mqtt(){
   digitalWrite(LED_BLUE, LOW);
     if (status == false)
     {   
-     _ha_entity_mode.publishNumber(0);
+     _ha_entity_mode.publishNumber(1);
      _ha_entity_modetext.publishString("Off", {{"attr1", "Off"}});
     }
     else
     {
     if (AutoOff == true) 
     { 
-     _ha_entity_mode.publishNumber(2);
+     _ha_entity_mode.publishNumber(3);
      char s1[25]="AutoOff ";
      dtostrf(AutoOffTimeValue, 4, 0, MinuteDisplay);
      strcat(s1,MinuteDisplay);
@@ -68,7 +69,7 @@ void mqtt(){
     else
     if (AutoHum == true) 
     { 
-     _ha_entity_mode.publishNumber(3);
+     _ha_entity_mode.publishNumber(4);
      char s1[20]="AutoHum ";     
      dtostrf(AutoHumValue, 2, 0, MinuteDisplay);
      strcat(s1,MinuteDisplay); 
@@ -77,7 +78,7 @@ void mqtt(){
     }
     else
     { 
-     _ha_entity_mode.publishNumber(1);
+     _ha_entity_mode.publishNumber(2);
      char s1[20]="On ";     
      dtostrf(TargetTemp, 2, 0, MinuteDisplay);
      strcat(s1,MinuteDisplay); 
@@ -124,5 +125,5 @@ void mqtt(){
     _last_publish_ms = now;
      digitalWrite(LED_BLUE, HIGH);
   }
-  
+#endif  
 }
