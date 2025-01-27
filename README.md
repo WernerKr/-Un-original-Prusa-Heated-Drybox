@@ -13,6 +13,9 @@ which is needed for History Graphic
 - To connect the DS18B20 temperature sensors (3 are supported in the program code) a 4.7 KOhm resistor must be used between pin D4 and Vin (=5V). All data lines of the DS18B20 are connected to pin D4 at the same time.
 - Since the Arduino Nano Esp32 has a higher internal temperature, the DHT20 heats up more and the temperature value is therefore distorted when the heating is off.
 - Therefore, it makes sense to move/mount the DHT20 sensor outside the Z-bracket, perhaps above the Z-bracket near the fan
+![drybox2_dht20](https://github.com/user-attachments/assets/736e4f29-4da5-492b-8026-13ead673e3a8)
+
+
 #### All user settings are now stored in the file arduino_settings.h.
 - #define debug
 - #define showFraction
@@ -33,7 +36,8 @@ which is needed for History Graphic
 
 ### DryBox Home Assitant Graph
 
-![HA_drybox_graph](https://github.com/user-attachments/assets/67c3691f-dd2e-43b1-ae88-55aabc3eaedd)
+![drybox_graph](https://github.com/user-attachments/assets/57c977a6-f2c3-4c00-a06f-d0d6ff1cb4cb)
+![Drybox2_graph](https://github.com/user-attachments/assets/fd4046ba-71b6-4693-aa11-d28a50dbf49f)
 
 ![Drybox2_HA](https://github.com/user-attachments/assets/3edbefd8-4533-434f-ae55-5d323bb587a8)
 ![drybox_ds18b20](https://github.com/user-attachments/assets/d0a6c2c7-14ae-4448-a3f6-f1fff9bb7f26)
