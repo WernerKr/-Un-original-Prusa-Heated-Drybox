@@ -1,4 +1,4 @@
-/* 25
+/* 
 Code for the (Un)original Prusa Drybox Heater
 Written by Bram Elema, Creative Commons BY-NC-SA
 
@@ -11,7 +11,7 @@ The TargetTemp is now 50°C, the AutoHum ist now 25%
 Update Display if Heating on is now 2 sec, tempDiff is now 0.1°C/0.18°F
 Caution! Led Pin is now 3 (was former 4) 
          because DS18B20 works for me only on PIN 4 = GPIO7 !!
-Werner Krenn - last modified 2025-01-21
+Werner Krenn - last modified 2025-01-28
 
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
@@ -32,7 +32,7 @@ REQUIRES the following Arduino libraries:
 */
 
 #include <Arduino.h>
-char swversion[12] = "2024-01-21";
+char swversion[12] = "2024-01-28";
 // This is for the Arduino IDE, where we always build with ArduinoJson. arduino-cli will not build/include libraries
 // that are not included anywhere. So we must include ArduinoJson.h so its available for IJson.h later.
 // For Platform IO, this is not the case and these examples are built both with ArduinoJson and nlohmann-json.
@@ -52,12 +52,15 @@ esp_err_t ESP32_ERROR;
 #include <IJson.h>
 #include <MQTTRemote.h>
 
-#include <entities/HaEntitySwitch.h>
-#include <entities/HaEntityNumber.h>
-#include <entities/HaEntityText.h>
-#include <entities/HaEntityString.h>
-#include <entities/HaEntityTemperature.h>
-#include <entities/HaEntityHumidity.h>
+#ifdef HomeAssistant
+ #include <entities/HaEntitySwitch.h>
+ #include <entities/HaEntityNumber.h>
+ #include <entities/HaEntityText.h>
+ #include <entities/HaEntityString.h>
+ #include <entities/HaEntityTemperature.h>
+ #include <entities/HaEntityHumidity.h>
+#endif
+
 #ifdef ESP32
 #include <WiFi.h>
 #elif ESP8266
@@ -93,13 +96,6 @@ float tempC;
 
 #endif
 
-const char wifi_ssid[] = WIFI_SSID; 
-const char wifi_password[] = WIFI_PASS; 
-const char mqtt_client_id[] = MQTT_ID;
-const char mqtt_host[] = MQTT_HOST;
-const char mqtt_username[] = MQTT_USER;
-const char mqtt_password[] = MQTT_PASS;
-
 #define Button1 6                       // on/off
 #define Button2 7                       // + increase
 #define Button3 8                       // - decrease  
@@ -114,7 +110,6 @@ const char mqtt_password[] = MQTT_PASS;
 #ifndef DS18B20xx
  #define Led 4
 #endif
-
 
 //#define PETG                         // Max = 73 °C	163
 //#define ABS                          // Max = 83 °C	181
@@ -182,6 +177,11 @@ float TempVal;
 bool printAdr = false;
 int device = 0;
 
+int bild_h = 0;
+int bild_w = 0; 
+int bildpos = 0; 
+bool screensaver = false;
+bool screensaverOn = false;
 
 char TempIntegerDisplay[4];
 char TempFractionDisplay[4];
@@ -192,6 +192,13 @@ char TargetHumDisplay[2];
 char MinuteDisplay[4];
 
 #ifdef HomeAssistant
+
+ const char wifi_ssid[] = WIFI_SSID; 
+ const char wifi_password[] = WIFI_PASS; 
+ const char mqtt_client_id[] = MQTT_ID;
+ const char mqtt_host[] = MQTT_HOST;
+ const char mqtt_username[] = MQTT_USER;
+ const char mqtt_password[] = MQTT_PASS;
 
 IJsonDocument _json_this_device_doc;
 void setupJsonForThisDevice() {
@@ -208,8 +215,8 @@ MQTTRemote _mqtt_remote(mqtt_client_id, mqtt_host, 1883, mqtt_username, mqtt_pas
 // See constructor of HaBridge for more documentation.
 HaBridge ha_bridge(_mqtt_remote, HAnamelower, _json_this_device_doc);
 
-HaEntityString _ha_entity_modetext(ha_bridge, "Mode", "drybox_modetxt");	//0=off, 1=on, 2=autooff, 3=autohum
-HaEntityNumber _ha_entity_mode(ha_bridge, "Mode", "drybox_mode");	//0=off, 1=on, 2=autooff, 3=autohum
+HaEntityString _ha_entity_modetext(ha_bridge, "Mode", "drybox_modetxt");
+HaEntityNumber _ha_entity_mode(ha_bridge, "Mode", "drybox_mode");	//1=off, 2=on, 3=autooff, 4=autohum
 
 HaEntitySwitch _ha_entity_switch_heater(ha_bridge, "Switch Heater", "drybox_switch_heater");
 HaEntitySwitch _ha_entity_switch_fan(ha_bridge, "Switch Fan", "drybox_switch_fan");
@@ -219,48 +226,48 @@ HaEntitySwitch _ha_entity_switch_fan(ha_bridge, "Switch Fan", "drybox_switch_fan
 
 #ifndef Fahrenheit
 
-HaEntityTemperature _ha_entity_temperature_target(ha_bridge, "Temperature Target", "drybox_temperature_target");
-HaEntityTemperature _ha_entity_temperature(ha_bridge, "Temperature", "drybox_temperature");
-HaEntityTemperature _ha_entity_temperature_2(ha_bridge, "Temperature 2", "drybox_temperature_2");
+HaEntityTemperature _ha_entity_temperature_target(ha_bridge, HAtemptarg, HAtemptargtxt);
+HaEntityTemperature _ha_entity_temperature(ha_bridge, HAtemp, HAtemptxt);
+HaEntityTemperature _ha_entity_temperature_2(ha_bridge, HAtemp2, HAtemp2txt);
 
 #ifdef DS18B20HA
  #ifdef DallasSensor1
-  HaEntityTemperature _ha_entity_temperature_e1(ha_bridge, "Temperature e1", "drybox_temperature_e1");
+  HaEntityTemperature _ha_entity_temperature_e1(ha_bridge, HAsensor1, HAsensor1txt);
  #endif
  #ifdef DallasSensor2
-  HaEntityTemperature _ha_entity_temperature_e2(ha_bridge, "Temperature e2", "drybox_temperature_e2");
+  HaEntityTemperature _ha_entity_temperature_e2(ha_bridge, HAsensor2, HAsensor2txt);
  #endif
  #ifdef DallasSensor3
-  HaEntityTemperature _ha_entity_temperature_e3(ha_bridge, "Temperature e3", "drybox_temperature_e3");
+  HaEntityTemperature _ha_entity_temperature_e3(ha_bridge, HAsensor3, HAsensor3txt);
  #endif
 #endif
 
 #endif
 
 #ifdef Fahrenheit
-HaEntityTemperature _ha_entity_temperature_target(ha_bridge, "Temperature Target", "drybox_temperature_target",
+HaEntityTemperature _ha_entity_temperature_target(ha_bridge, HAtemptarg, HAtemptargtxt,
                                            HaEntityTemperature::Configuration{.unit = HaEntityTemperature::Unit::F,
                                                                               .force_update = false});
-HaEntityTemperature _ha_entity_temperature(ha_bridge, "Temperature", "drybox_temperature",
+HaEntityTemperature _ha_entity_temperature(ha_bridge, HAtemp, HAtemptxt,
                                            HaEntityTemperature::Configuration{.unit = HaEntityTemperature::Unit::F,
                                                                               .force_update = false});
-HaEntityTemperature _ha_entity_temperature_2(ha_bridge, "Temperature 2", "drybox_temperature_2",
+HaEntityTemperature _ha_entity_temperature_2(ha_bridge, HAtemp2, HAtemp2txt,
                                            HaEntityTemperature::Configuration{.unit = HaEntityTemperature::Unit::F,
                                                                               .force_update = false});
 
 #ifdef DS18B20HA
  #ifdef DallasSensor1
-  HaEntityTemperature _ha_entity_temperature_e1(ha_bridge, "Temperature e1", "drybox_temperature_e1",
+  HaEntityTemperature _ha_entity_temperature_e1(ha_bridge, HAsensor1, HAsensor1txt,
                                            HaEntityTemperature::Configuration{.unit = HaEntityTemperature::Unit::F,
                                                                               .force_update = false});
  #endif
  #ifdef DallasSensor2
-  HaEntityTemperature _ha_entity_temperature_e2(ha_bridge, "Temperature e2", "drybox_temperature_e2",
+  HaEntityTemperature _ha_entity_temperature_e2(ha_bridge, HAsensor2, HAsensor2txt,
                                            HaEntityTemperature::Configuration{.unit = HaEntityTemperature::Unit::F,
                                                                               .force_update = false});
  #endif
  #ifdef DallasSensor3
-  HaEntityTemperature _ha_entity_temperature_e3(ha_bridge, "Temperature e3", "drybox_temperature_e3",
+  HaEntityTemperature _ha_entity_temperature_e3(ha_bridge, HAsensor3, HAsensor3txt,
                                            HaEntityTemperature::Configuration{.unit = HaEntityTemperature::Unit::F,
                                                                               .force_update = false});
  #endif
@@ -268,9 +275,9 @@ HaEntityTemperature _ha_entity_temperature_2(ha_bridge, "Temperature 2", "drybox
 
 #endif
 
-HaEntityHumidity _ha_entity_humidity_target(ha_bridge, "Humidity Target", "drybox_humidity_target");
-HaEntityHumidity _ha_entity_humidity(ha_bridge, "Humidity", "drybox_humidity");
-HaEntityHumidity _ha_entity_humidity_2(ha_bridge, "Humidity 2", "drybox_humidity_2");
+HaEntityHumidity _ha_entity_humidity_target(ha_bridge, HAhumtarg, HAhumtargtxt);
+HaEntityHumidity _ha_entity_humidity(ha_bridge, HAhum, HAhumtxt);
+HaEntityHumidity _ha_entity_humidity_2(ha_bridge, HAhum2, HAhum2txt);
 
 #endif
 
@@ -715,17 +722,21 @@ void loop(){
       sensorUpdate();
 
       display.clearDisplay();
-      drawStatus();
-      if (not showSecondTemp){
-       drawTemperature();
-       drawHumidity();
-      }
-      else
-      {
-       drawTemperature1();
-       drawHumidity1();
-       drawTemperature2();
-       drawHumidity2();
+      if (screensaverOn == true) {
+       printPixel();
+      } else {       
+       drawStatus();
+       if (not showSecondTemp){
+        drawTemperature();
+        drawHumidity();
+       }
+       else
+       {
+        drawTemperature1();
+        drawHumidity1();
+        drawTemperature2();
+        drawHumidity2();
+        }
       }
       display.display();    
       heater();
@@ -734,7 +745,8 @@ void loop(){
     {
       if ((TempHigh == false) and (Hot == true))
       {
-        digitalWrite(Heater, HIGH); 
+        digitalWrite(Heater, HIGH);
+        screensaverOn = false; 
       }
     }
 
@@ -774,6 +786,7 @@ void loop(){
        digitalWrite(Fan, HIGH);
        FanRun = true;
        FanOn = true;
+       screensaverOn = false;
       }
       display.clearDisplay();
       drawStatus();
@@ -793,17 +806,30 @@ void loop(){
     }
     #ifdef SecondTemp
     if (status == false){
-     if((digitalRead(Button3) == LOW) and (not showSecondTemp)) {                 // Action button 3: second Temp view on
+      if ((screensaver == true) and (FanValue <=0)) { screensaverOn = true; }
+
+    // if((digitalRead(Button3) == LOW) and (not showSecondTemp)) {                 // Action button 3: second Temp view on
+    if(( digitalRead(Button3) == LOW )) {                 // Action button 3: ScreenSaver ?
       showSecondTemp = true;
+      #ifdef BlankScreen
+       screensaver = !screensaver;
+       screensaverOn = screensaver;
+      #endif 
+
       display.clearDisplay();
+      if (screensaverOn == true){
+      printPixel();
+      } else {      
       drawStatus();
       drawTemperature1();
       drawHumidity1();
       drawTemperature2();
       drawHumidity2();
-      display.display(); 
+      }
+      display.display();
       delay(200);
      } 
+     #ifndef DS18B20xx
      if((digitalRead(Button3) == LOW) and (showSecondTemp)) {                 // Action button 3: second Temp view off
       showSecondTemp = false;
       display.clearDisplay();
@@ -813,6 +839,7 @@ void loop(){
       display.display(); 
       delay(200);
      } 
+     #endif 
     }
     #endif
 
@@ -861,17 +888,21 @@ void loop(){
       sensorUpdate();
 
       display.clearDisplay();
-      drawStatus();
+      if (screensaverOn == true){
+      printPixel();
+      } else {      
+       drawStatus();
        if (not showSecondTemp){
        drawTemperature();
        drawHumidity();
-      }
-      else
-      {
+       }
+       else
+       {
        drawTemperature1();
        drawHumidity1();
        drawTemperature2();
        drawHumidity2();
+       }
       }
       display.display();
     }

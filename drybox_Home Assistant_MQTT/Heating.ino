@@ -103,6 +103,7 @@ void heater(){
     {
       if ((AutoHum == false) or ((AutoHum == true) and (HumOff == false)))
       digitalWrite(Heater, HIGH);            // Turns heating element on if more than 0.2 of 0.5 degrees celcius under the target temperature
+      screensaverOn = false;
       if ((AutoHum == true) and (FanHumOn == true))
       { 
       digitalWrite(Fan, HIGH);
@@ -115,6 +116,7 @@ void heater(){
       digitalWrite(Heater, LOW);
       Hot = false;  
       if ((AutoHum == true) and (FanValue <=0)) {
+       if (screensaver == true) {screensaverOn = true; } 
        digitalWrite(Fan, LOW);
        FanRun = false; 
       }   

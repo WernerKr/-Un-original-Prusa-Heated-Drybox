@@ -73,6 +73,25 @@ void drawLogo() {
   display.display();
 }
 
+void printPixel() {
+/*
+int bild_h = 0;	max 64
+int bild_w = 0; 	max 128
+int bildpos = 0;	max 8192   
+*/
+#ifdef UsePixel
+  int x2 = bildpos / 128;
+  bild_h =  x2;
+  bildpos += 1; 
+  if (bildpos >= 8192) {bildpos = 0;}
+  display.fillRect(bild_w, bild_h, 1, 1, SSD1306_WHITE);
+
+  bild_w += 1;
+  if (bild_w >= 127) {bild_w = 0;}
+#endif
+}
+
+
 void drawStatus() {
    if ((AutoOffSet == true) or (AutoHumSet == true) or (HeatMaxSet == true))
    {
@@ -513,20 +532,20 @@ void drawTemperature2() {
 
     int TempInteger = int(TempVal);
     int TempFraction = int((TempVal-TempInteger)*10);
-    dtostrf(TempInteger, 2, 0, TempIntegerDisplay);
+    dtostrf(TempInteger, 3, 0, TempIntegerDisplay);
     dtostrf(TempFraction, 1, 0, TempFractionDisplay);
 
     display.setTextSize(2);
     display.setTextColor(SSD1306_WHITE);
 
-    if (TempVal > 100){
-        display.setCursor(70,48);
-      } else {
+    //if (TempVal > 100){
+    //    display.setCursor(70,48);
+    //  } else {
         display.setCursor(98,48);
         display.print(TempFractionDisplay);
         display.fillRect(94, 60, 2, 2, SSD1306_WHITE);  
-        display.setCursor(70,48);     
-      }
+        display.setCursor(58,48);     
+      //}
 
       display.print(TempIntegerDisplay);
       display.fillCircle(111, 50, 2, SSD1306_WHITE);
