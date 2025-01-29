@@ -3,10 +3,8 @@
 Required processor Arduino Nano ESP32-S3, is pin compatible with the Arduino Nano 
 with the exception that the 5V pin only supplies a voltage when USB is connected. 
 Therefore, no more 5V is taken from this pin.
-
-For Johboh/HomeAssistantEntities you need >= 7.0.8, supports 
-state_class:measurement;
-which is needed for History Graphic 
+![IDE_Arduino_Nano_ESP32](https://github.com/user-attachments/assets/f01aed85-457e-4a97-acce-c30514ae5602)
+- The former "down" Button (was Second Temp/Hum on/off) is now for ScreenSaver
 - The former PIN D4 for Led is now D3. 
 - The DS18B20 data works only with PIN D4.
 - But to use it, the GPIO pin = 7 for D4 must be set.
@@ -16,20 +14,23 @@ which is needed for History Graphic
 ![drybox2_dht20](https://github.com/user-attachments/assets/736e4f29-4da5-492b-8026-13ead673e3a8)
 
 
-#### All user settings are now stored in the file arduino_settings.h.
-- #define debug
-- #define showFraction
-- #define controlLed
-- #define ControllLedAutooff
-- #define SecondTemp
-- #define HomeAssistant	
-- security and lan settings for Home Assistant
-- #define DS18B20xx
-- #define DS18B20HA
-- #define DallasAdrSet
-- #define DallasSensor1
-- #define DallasSensor2
-- #define DallasSensor3
+#### All user settings are now stored in the file arduino_settings.h
+- #define debug -> to see the Temp/Hum Data and DS18B20 addresses in the Serial Monitor uncomment next line
+- #define showFraction -> all values with decimal values otherwise only integer values
+- #define controlLed -> iIf an LED strip needs to be controlled ("up" Button) in non-heating mode
+- #define ControllLedAutooff -> Led on and Temperature >=60°C/140°F (= max. operating temperature LED strip) the led is switched off
+- #define SecondTemp -> if a second temp/hum is available - not tested without this - so should now always set
+- #define BlankScreen -> on/off ScreenSaver with "down" Button in non-heating mode
+- #define UsePixel -> ScreenSaver is "running Pixel" otherwise blank Screen
+- #define WATCHDOG -> the program is monitored with WatchDog
+- #define HomeAssistant	-> send data to Homee Assistant
+-         security, lan and Name settings for Home Assistant
+- #define DS18B20xx -> also support and show DS18B20 temperature sensors
+- #define DS18B20HA -> DS18B20 data also send to Home Assinstant
+- #define DallasAdrSet -> are the DS18B20 temp sensors adresses above correct? Should be set so that the sensor order always remains the same
+- #define DallasSensor1 -> first DS18B20 temp sensors available
+- #define DallasSensor2 -> second DS18B20 temp sensors available
+- #define DallasSensor3 -> third DS18B20 temp sensors available
 - all other settings (targetTemp, targetHum ...)
 
 ![Home Assistant](https://github.com/user-attachments/assets/1bd42809-0463-4e9a-9c2c-450904f3fe8c)
