@@ -33,6 +33,13 @@ Therefore, no more 5V is taken from this pin.
 - #define DallasSensor3 -> third DS18B20 temp sensors available
 - all other settings (targetTemp, targetHum ...)
 
+#### ScreenSaver Mode:
+The reason why this function was introduced is that the used OLED display produces "ghost characters" when used for a long time and eventually becomes illegible. This extends its lifespan.
+Usage: Switching on/off is only possible in non-heating mode using the "Down" button. As soon as heating mode is started, the ScreenSaver is switched off, with the exception: with AutoHum and the heating and fan are off, the previously set ScreenSaver mode is activated again. There are two types of ScreenSaver: The default is that a pixel moves across the screen every 2 (AutoHum heating mode) or 10 (off mode) seconds. The alternative is (//#define UsePixel - i.e. not active) the screen is completely off.
+
+#### DryBox 
+With the appropriate settings, the program behaves just like the DryBox without ESP32, but can easily be expanded with the features of the ESP32 (Wifi, Home Assistant, DS18B20 Temp Sensor).
+
 ![Home Assistant](https://github.com/user-attachments/assets/1bd42809-0463-4e9a-9c2c-450904f3fe8c)
 
 ### DryBox Home Assitant Graph
