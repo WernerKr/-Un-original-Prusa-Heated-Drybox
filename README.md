@@ -17,16 +17,16 @@ Therefore, no more 5V is taken from this pin, only from buck converter (or Vin P
 #### All user settings are now stored in the file arduino_settings.h
 - #define debug -> to see the Temp/Hum Data and DS18B20 addresses in the Serial Monitor
 - #define showFraction -> all values with decimal values otherwise only integer values
-- #define controlLed -> iIf an LED strip needs to be controlled ("up" Button) in non-heating mode
+- #define controlLed -> if an LED strip needs to be controlled ("up" Button) in non-heating mode
 - #define ControllLedAutooff -> Led on and Temperature >=60°C/140°F (= max. operating temperature LED strip) the led is switched off
 - #define SecondTemp -> if a second temp/hum is available - not tested without this - so should now always set
 - #define BlankScreen -> on/off ScreenSaver with "down" Button in non-heating mode
 - #define UsePixel -> ScreenSaver is "running Pixel" otherwise blank Screen
 - #define WATCHDOG -> the program is monitored with WatchDog
-- #define HomeAssistant	-> send data to Homee Assistant
+- #define HomeAssistant	-> send data to Home Assistant
 -         security, lan and Name settings for Home Assistant
 - #define DS18B20xx -> also support and show DS18B20 temperature sensors
-- #define DS18B20HA -> DS18B20 data also send to Home Assinstant
+- #define DS18B20HA -> DS18B20 data also send to Home Assinstant, should only be set after the sensor address assignment has been made
 - #define DallasAdrSet -> are the DS18B20 temp sensors adresses above correct? Should be set so that the sensor order always remains the same
 - #define DallasSensor1 -> first DS18B20 temp sensors available
 - #define DallasSensor2 -> second DS18B20 temp sensors available
