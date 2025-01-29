@@ -2,7 +2,7 @@
 
 Required processor Arduino Nano ESP32-S3, is pin compatible with the Arduino Nano 
 with the exception that the 5V pin only supplies a voltage when USB is connected. 
-Therefore, no more 5V is taken from this pin.
+Therefore, no more 5V is taken from this pin, only from buck converter (or Vin Pin, whereas this Pin is always connected to buck converter).
 ![IDE_Arduino_Nano_ESP32](https://github.com/user-attachments/assets/f01aed85-457e-4a97-acce-c30514ae5602)
 - The former "down" Button (was Second Temp/Hum on/off) is now for ScreenSaver
 - The former PIN D4 for Led is now D3. 
