@@ -15,7 +15,7 @@ Therefore, no more 5V is taken from this pin.
 
 
 #### All user settings are now stored in the file arduino_settings.h
-- #define debug -> to see the Temp/Hum Data and DS18B20 addresses in the Serial Monitor uncomment next line
+- #define debug -> to see the Temp/Hum Data and DS18B20 addresses in the Serial Monitor
 - #define showFraction -> all values with decimal values otherwise only integer values
 - #define controlLed -> iIf an LED strip needs to be controlled ("up" Button) in non-heating mode
 - #define ControllLedAutooff -> Led on and Temperature >=60°C/140°F (= max. operating temperature LED strip) the led is switched off
