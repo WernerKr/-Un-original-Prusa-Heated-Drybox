@@ -11,8 +11,10 @@ The TargetTemp is now 50°C, the AutoHum ist now 25%
 Update Display if Heating on is now 2 sec, tempDiff is now 0.1°C/0.18°F
 Caution! Led Pin is now 3 (was former 4) 
          because DS18B20 works for me only on PIN 4 = GPIO7 !!
-Werner Krenn - last modified 2025-01-28
-
+Werner Krenn - last modified 
+*/
+char swversion[12] = "2025-01-30";
+/*
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
  - Adafruit_SSD1306 Library: https://github.com/adafruit/Adafruit_SSD1306
@@ -32,7 +34,6 @@ REQUIRES the following Arduino libraries:
 */
 
 #include <Arduino.h>
-char swversion[12] = "2024-01-28";
 // This is for the Arduino IDE, where we always build with ArduinoJson. arduino-cli will not build/include libraries
 // that are not included anywhere. So we must include ArduinoJson.h so its available for IJson.h later.
 // For Platform IO, this is not the case and these examples are built both with ArduinoJson and nlohmann-json.
@@ -47,12 +48,13 @@ esp_err_t ESP32_ERROR;
 #ifndef PLATFORMIO
 #include <ArduinoJson.h>
 #endif
-#include <HaBridge.h>
-// This is here for CI only. You can remove this include and include ArduinoJson.h or nlohmann/json.hpp directly.
-#include <IJson.h>
-#include <MQTTRemote.h>
 
 #ifdef HomeAssistant
+ #include <HaBridge.h>
+ // This is here for CI only. You can remove this include and include ArduinoJson.h or nlohmann/json.hpp directly.
+ #include <IJson.h>
+ #include <MQTTRemote.h>
+
  #include <entities/HaEntitySwitch.h>
  #include <entities/HaEntityNumber.h>
  #include <entities/HaEntityText.h>
@@ -77,7 +79,7 @@ esp_err_t ESP32_ERROR;
 #include <Wire.h>
 
 
-				//DallasTemperature
+//DallasTemperature
 #ifdef DS18B20xx
 
 #include <DallasTemperature.h>
@@ -141,6 +143,14 @@ unsigned long AutoOffSetpreviousMillis = 0;
 unsigned long FanOnpreviousMillis = 0;
 unsigned long FanHumOnpreviousMillis = 0;
 unsigned long debugMillis = 0;
+
+#ifdef BlankScreen
+#ifdef UsePixel
+#ifdef BlankScreenAutoOff
+unsigned long ScreenSaverpreviousMillis = 0;
+#endif
+#endif
+#endif
 
 int FanValue = 0;
 int AutoOffTimeValue;
@@ -215,13 +225,13 @@ MQTTRemote _mqtt_remote(mqtt_client_id, mqtt_host, 1883, mqtt_username, mqtt_pas
 // See constructor of HaBridge for more documentation.
 HaBridge ha_bridge(_mqtt_remote, HAnamelower, _json_this_device_doc);
 
-HaEntityString _ha_entity_modetext(ha_bridge, "Mode", "drybox_modetxt");
-HaEntityNumber _ha_entity_mode(ha_bridge, "Mode", "drybox_mode");	//1=off, 2=on, 3=autooff, 4=autohum
+HaEntityString _ha_entity_modetext(ha_bridge, HAmodetx, HAmodetxttxt);
+HaEntityNumber _ha_entity_mode(ha_bridge, HAmode, HAmodetxt);	//1=off, 2=on, 3=autooff, 4=autohum
 
-HaEntitySwitch _ha_entity_switch_heater(ha_bridge, "Switch Heater", "drybox_switch_heater");
-HaEntitySwitch _ha_entity_switch_fan(ha_bridge, "Switch Fan", "drybox_switch_fan");
+HaEntitySwitch _ha_entity_switch_heater(ha_bridge, HAsheater, HAsheatertxt);
+HaEntitySwitch _ha_entity_switch_fan(ha_bridge, HAsfan, HAsfantxt);
 #ifdef controlLed
- HaEntitySwitch _ha_entity_switch_led(ha_bridge, "Switch Led", "drybox_switch_led");
+ HaEntitySwitch _ha_entity_switch_led(ha_bridge, HAsled, HAsledtxt);
 #endif
 
 #ifndef Fahrenheit
@@ -779,6 +789,23 @@ void loop(){
       }
     }
 
+    #ifdef BlankScreen 
+    #ifdef UsePixel
+    #ifdef BlankScreenAutoOff
+    if ((screensaver == false) and (screensaverOn == false) and (FanValue <=0)) {
+      ScreenSaverpreviousMillis = currentMillis;
+      screensaver = true;
+      }
+     if (screensaverOn == false) { 
+      if((currentMillis - ScreenSaverpreviousMillis)/1000 >= screenSaverTimeOut) {
+       screensaverOn = true;
+       ScreenSaverpreviousMillis = currentMillis;
+      }  
+     }
+    #endif
+    #endif 
+    #endif
+
     if(digitalRead(Button1) == LOW) {                 // Action button 1: switch heating system from off to on
       status = !status;
       sensorUpdate();
@@ -806,7 +833,10 @@ void loop(){
     }
     #ifdef SecondTemp
     if (status == false){
-      if ((screensaver == true) and (FanValue <=0)) { screensaverOn = true; }
+
+    #ifndef BlankScreenAutoOff  
+     if ((screensaver == true) and (FanValue <=0)) { screensaverOn = true; }
+    #endif
 
     // if((digitalRead(Button3) == LOW) and (not showSecondTemp)) {                 // Action button 3: second Temp view on
     if(( digitalRead(Button3) == LOW )) {                 // Action button 3: ScreenSaver ?
@@ -814,6 +844,11 @@ void loop(){
       #ifdef BlankScreen
        screensaver = !screensaver;
        screensaverOn = screensaver;
+       #ifdef UsePixel
+       #ifdef BlankScreenAutoOff     
+        if (screensaverOn == false) {ScreenSaverpreviousMillis = currentMillis;}
+       #endif
+       #endif 
       #endif 
 
       display.clearDisplay();

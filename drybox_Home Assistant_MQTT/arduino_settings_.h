@@ -14,6 +14,7 @@
 			// Showing of SecondTemp is now always on! Is needed for DS18B20 sensors
 #define BlankScreen		// activate ScreenSaver with "down" Button - 
 #define UsePixel		// ScreenSaver is "running Pixel" otherwise blank Screen
+#define BlankScreenAutoOff            // if heating is off sreensaver active after 10 minutes - need also #UsePixel
 
 #define WATCHDOG
 
@@ -24,12 +25,24 @@
  char HAname[12] = "Drybox2";
  char HAnamelower[12] = "drybox2";
 
+ char HAmodetx[] = "Mode";
+ char HAmode[] = "Mode";
+ char HAsheater[] = "Switch Heater";
+ char HAsfan[] = "Switch Fan";
+ char HAsled[] = "Switch Led";
+
  char HAtemptarg[] = "Temperature Target";		//Sensor Name in Home Assistant
  char HAhumtarg[] = "Humidity Target";
  char HAtemp[] = "Temperature";
  char HAtemp2[] = "Temperature 2";
  char HAhum[] = "Humidity";
  char HAhum2[] = "Humidity 2";
+
+ char HAmodetxttxt[] = "drybox_modetxt";
+ char HAmodetxt[] = "drybox_mode";
+ char HAsheatertxt[] = "drybox_switch_heater";
+ char HAsfantxt[] = "drybox_switch_fan";
+ char HAsledtxt[] = "drybox_switch_led";
 
  char HAtemptargtxt[] = "drybox_temperature_target";	//Entity-ID ( sensor.drybox_temperature_target )
  char HAhumtargtxt[] = "drybox_humidity_target";
@@ -58,7 +71,7 @@ uint8_t sensor3[8] = { 0x28, 0x57, 0x8A, 0x84, 0x00, 0x00, 0x00, 0x14 };
 
 //#define DallasAdrSet		// are the DS18B20 temp sensors adresses above correct? Can be found with debug and seriell Monitor
 
-#define DallasSensor1		// frist DS18B20 temp sensors available
+#define DallasSensor1		// first DS18B20 temp sensors available
 #define DallasSensor2		// second DS18B20 temp sensors available
 #define DallasSensor3		// third DS18B20 temp sensors available
 
@@ -111,3 +124,4 @@ int MaxHumSet = 65;                        // max allowed setting TargetHum
 int MinHumSet = 10;
 float humDiff = 0.2;                       // diff between hum values on/off
 
+int screenSaverTimeOut = 600;            // AutoOn Screensaver after 10 minutes / 600 sec

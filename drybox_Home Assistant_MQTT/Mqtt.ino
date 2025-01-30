@@ -46,13 +46,14 @@ void mqtt(){
 
   _was_connected = connected;
 
-  // Publish temperature and brightness status every 10 seconds.
+  // Publish values every 10 seconds.
   auto now = millis();
   if (now - _last_publish_ms >= 10000) {
   digitalWrite(LED_BLUE, LOW);
     if (status == false)
-    {   
-     _ha_entity_mode.publishNumber(1);
+    {
+      if (screensaverOn == true) { _ha_entity_mode.publishNumber(5); }
+      else { _ha_entity_mode.publishNumber(1); }
      _ha_entity_modetext.publishString("Off", {{"attr1", "Off"}});
     }
     else
