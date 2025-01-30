@@ -22,6 +22,7 @@ Therefore, no more 5V is taken from this pin, only from buck converter (or Vin P
 - #define SecondTemp -> if a second temp/hum is available - not tested without this - so should now always set
 - #define BlankScreen -> on/off ScreenSaver with "down" Button in non-heating mode
 - #define UsePixel -> ScreenSaver is "running Pixel" otherwise blank Screen
+- #define BlankScreenAutoOff -> if heating is off sreensaver active after 10 minutes - need also #define UsePixel
 - #define WATCHDOG -> the program is monitored with WatchDog
 - #define HomeAssistant	-> send data to Home Assistant
 -         security, lan and Name settings for Home Assistant
