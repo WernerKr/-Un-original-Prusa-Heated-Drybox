@@ -13,7 +13,7 @@ Caution! Led Pin is now 3 (was former 4)
          because DS18B20 works for me only on PIN 4 = GPIO7 !!
 Werner Krenn - last modified 
 */
-char swversion[12] = "2025-01-30";
+char swversion[12] = "2025-02-01";
 /*
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
@@ -345,23 +345,23 @@ void setup(){
   #endif 
 
   #ifdef Fahrenheit
-    TargetTemp = int(TargetTemp *9/5) + 32);
-    MaxSet = int(MaxSet *9/5) + 32);
-    int Max = int(Max *9/5) + 32);
-    int HeatMax = int(HeatMax *9/5) + 32);
-    int HeatMin = int(HeatMin *9/5) + 32);
+    TargetTemp = int((TargetTemp *9/5) + 32);
+    MaxSet = int((MaxSet *9/5) + 32);
+    int Max = int((Max *9/5) + 32);
+    int HeatMax = int((HeatMax *9/5) + 32);
+    int HeatMin = int((HeatMin *9/5) + 32);
 
     int HeatMaxValue= Max;
-    MinSet = int(MinSet *9/5) + 32);
-    int FanCor = int(FanCor *9/5) + 32);
-    int FanCor1 = int(FanCor1 *9/5) + 32);
-    int FanCor2 = int(FanCor2 *9/5) + 32);
-    //int FanCor3 = int(FanCor3 *9/5) + 32);
-    //int FanCor4 = int(FanCor4 *9/5) + 32);
-    int FanCor01 = int(FanCor01 *9/5) + 32);
-    int FanCor02 = int(FanCor02 *9/5) + 32);
-    int FanCor03 = int(FanCor03 *9/5) + 32);
-    int FanCor04 = int(FanCor04  *9/5) + 32);
+    MinSet = int((MinSet *9/5) + 32);
+    int FanCor = int((FanCor *9/5) + 32);
+    int FanCor1 = int((FanCor1 *9/5) + 32);
+    int FanCor2 = int((FanCor2 *9/5) + 32);
+    //int FanCor3 = int((FanCor3 *9/5) + 32);
+    //int FanCor4 = int((FanCor4 *9/5) + 32);
+    int FanCor01 = int((FanCor01 *9/5) + 32);
+    int FanCor02 = int((FanCor02 *9/5) + 32);
+    int FanCor03 = int((FanCor03 *9/5) + 32);
+    int FanCor04 = int((FanCor04  *9/5) + 32);
 
     char text[] = "°F"; 
    if (withDuct == true)
