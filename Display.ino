@@ -497,20 +497,20 @@ void drawHumidity1() {
 void drawTemperature2() {
     int TempInteger = int(Temperature2);
     int TempFraction = int((Temperature2-TempInteger)*10);
-    dtostrf(TempInteger, 2, 0, TempIntegerDisplay);
+    dtostrf(TempInteger, 3, 0, TempIntegerDisplay);
     dtostrf(TempFraction, 1, 0, TempFractionDisplay);
 
     display.setTextSize(2);
     display.setTextColor(SSD1306_WHITE);
 
-    if(Temperature2 > 100){
-        display.setCursor(70,48);
-      } else {
-        display.setCursor(98,48);
-        display.print(TempFractionDisplay);
-        display.fillRect(94, 60, 2, 2, SSD1306_WHITE);  
-        display.setCursor(70,48);     
-      }
+      display.setCursor(98,48);
+      display.print(TempFractionDisplay);
+      display.fillRect(94, 60, 2, 2, SSD1306_WHITE);  
+
+      display.setCursor(98,48);
+      display.print(TempFractionDisplay);
+      display.fillRect(94, 60, 2, 2, SSD1306_WHITE);  
+      display.setCursor(58,48);     
 
       display.print(TempIntegerDisplay);
       display.fillCircle(111, 50, 2, SSD1306_WHITE);

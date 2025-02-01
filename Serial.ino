@@ -9,7 +9,8 @@ and new Fan control, and Led Strip control
 If heater is set on, the data now updated each 5 sec otherwise 10 sec 
 The TargetTemp is now 50°C, the AutoHum ist now 25%
 Update Display if Heating on is now 2 sec, tempDiff is now 0.1°C/0.18°F
-Werner Krenn - last modified 2024-12-11
+settings are now in arduino_settings.h
+Werner Krenn - last modified 2025-02-01
 
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
@@ -18,20 +19,15 @@ REQUIRES the following Arduino libraries:
  - DHT_sensor_library Library: https://github.com/adafruit/DHT-sensor-library
 */
 
+#include <Arduino.h>
+#include "arduino_settings.h"
+
 #include "DHT.h"
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <DFRobot_DHT20.h>
 #include <SPI.h>
 #include <Wire.h>
-
-// Uncomment the next line if you want the temperature to be displayed in Fahrenheit, it is displayed in Celcius by default
-// #define Fahrenheit
-
-// to see the Temp/Hum Data in the Serial Monitor uncomment next line
-// #define debug
-
-#define showFraction                    // all values with decimal values otherwise only integer values
 
 #define Button1 6                       // on/off
 #define Button2 7                       // + increase
@@ -45,13 +41,6 @@ REQUIRES the following Arduino libraries:
 //#define ASA                          // Max = 93 °C	199
 //#define PC                           // Max = 123 °C	253
 //#define PA                           // Max = 143 °C	289
-
-// If an LED strip needs to be controlled otherwise uncomment next line
-#define controlLed
-#define ControllLedAutooff            // Led on and Temperature >=60°C/140°F (= max. operating temperature LED strip) the led is switched off
-
-// if have not attached a second temp/hum Sensor (dht22 or dht21) uncomment next line
-#define SecondTemp                    // should be placed on the floor under the heater or duct
 
 #define DHT_PIN 9 // The Arduino Nano pin connected to DHT21/22 sensor
 #define DHT_TYPE DHT21
@@ -67,42 +56,6 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 DFRobot_DHT20 dht20;
 DHT dht(DHT_PIN, DHT_TYPE);
 
-bool overHeat = true;                     // control overheating - only used if second temp/hum is available
-bool withDuct = true;                     // Duct installed -> Tempdiff = 0.1°C otherwise 0.3°C
-int TargetTemp = 50;
-int Refresh = 2000;                       // Update values in msec if heater is on (former 5000)
-int MaxSet = 70;                          // max allowed setting TargetTemp °C
-int MinSet = 20;                          // min allowed setting TargetTemp °C
-int AutoOffTime = 360;                    // here 6 hours
-int MaxAutoOffTime = 2880;                // max 2 days
-int FanDelay = 300;                       // 300 seconds=5 minutes max 999 seconds because space Display
-int FanCor = 50;                          // >= 50°C TargetTemp add to Fandelay 60 or 90 sec
-int FanCor1 = 55;                         // all FanCor in °C - are later converted to Fahrenheit if set
-int FanCor2 = 60;
-//int FanCor3 = 65;
-//int FanCor4 = 70;
-int FanCor01 = 40;
-int FanCor02 = 35;
-int FanCor03 = 30;
-int FanCor04 = 25;
-
-int TargetHum = 25;
-int AutoHumValue = 25;
-int MaxHumSet = 65;                        // max allowed setting TargetHum
-int MinHumSet = 10;
-float humDiff = 0.1;                       // diff between hum values on/off
-bool HumOff = false;                       // AutoHum trigger 
-
-int Max = 85;                             // overHeating Temp under the duct, need #overHeat = true and SecondTemp
-int HeatMaxValue = 85;
-int HeatMax = 140;
-int HeatMin = 70;
-
-float TemperatureCor = 0.0;               // correction Temperatur
-float HumidityCor = 0.0;                  // correction Humidity
-float Temperature2Cor = 0.0;              // correction Temperatur2 if #define SecondTemp 
-float Humidity2Cor = 0.0;                 // correction Humidity2 if #define SecondTemp
-
 unsigned long previousMillis = 0;
 unsigned long AutoOffpreviousMillis = 0;
 unsigned long AutoOffSetpreviousMillis = 0;
@@ -116,6 +69,7 @@ bool status = false;
 bool Hot = false;
 bool AutoOff = false;
 bool AutoOffSet = false;
+int AutoHumValue = 25; 
 bool AutoHum = false;
 bool AutoHumSet = false;
 bool HeatMaxSet = false;
@@ -132,6 +86,7 @@ float Humidity;
 float Temperature2;
 float Humidity2;
 float tempDiff;
+bool HumOff = false;                       // AutoHum trigger 
 
 char TempIntegerDisplay[4];
 char TempFractionDisplay[4];
@@ -186,23 +141,23 @@ void setup(){
   #endif 
 
   #ifdef Fahrenheit
-    TargetTemp = int(TargetTemp *9/5) + 32);
-    MaxSet = int(MaxSet *9/5) + 32);
-    int Max = int(Max *9/5) + 32);
-    int HeatMax = int(HeatMax *9/5) + 32);
-    int HeatMin = int(HeatMin *9/5) + 32);
+    TargetTemp = int((TargetTemp *9/5) + 32);
+    MaxSet = int((MaxSet *9/5) + 32);
+    int Max = int((Max *9/5) + 32);
+    int HeatMax = int((HeatMax *9/5) + 32);
+    int HeatMin = int((HeatMin *9/5) + 32);
 
     int HeatMaxValue= Max;
-    MinSet = int(MinSet *9/5) + 32);
-    int FanCor = int(FanCor *9/5) + 32);
-    int FanCor1 = int(FanCor1 *9/5) + 32);
-    int FanCor2 = int(FanCor2 *9/5) + 32);
-    //int FanCor3 = int(FanCor3 *9/5) + 32);
-    //int FanCor4 = int(FanCor4 *9/5) + 32);
-    int FanCor01 = int(FanCor01 *9/5) + 32);
-    int FanCor02 = int(FanCor02 *9/5) + 32);
-    int FanCor03 = int(FanCor03 *9/5) + 32);
-    int FanCor04 = int(FanCor04  *9/5) + 32);
+    MinSet = int((MinSet *9/5) + 32);
+    int FanCor = int((FanCor *9/5) + 32);
+    int FanCor1 = int((FanCor1 *9/5) + 32);
+    int FanCor2 = int((FanCor2 *9/5) + 32);
+    //int FanCor3 = int((FanCor3 *9/5) + 32);
+    //int FanCor4 = int((FanCor4 *9/5) + 32);
+    int FanCor01 = int((FanCor01 *9/5) + 32);
+    int FanCor02 = int((FanCor02 *9/5) + 32);
+    int FanCor03 = int((FanCor03 *9/5) + 32);
+    int FanCor04 = int((FanCor04  *9/5) + 32);
 
     char text[] = "°F"; 
    if (withDuct == true)
@@ -213,6 +168,7 @@ void setup(){
     } 
   #endif
 
+  AutoHumValue = TargetHum;
   AutoOffTimeValue = AutoOffTime;
   FanValue = FanDelay;
 
@@ -267,6 +223,9 @@ void loop(){
        FanHumOn = false;
        digitalWrite(Fan, LOW);
        }
+      if ( (Hot == false) and (FanValue <=0)){
+        digitalWrite(Fan, LOW);
+      }
     }
 
     if((digitalRead(Button2) == LOW) and (digitalRead(Button1) == LOW))
@@ -450,7 +409,7 @@ void loop(){
        AutoHumValue = AutoHumValue - 1;
        if (AutoHumValue < MinHumSet)
        { AutoHumValue = MinHumSet;} 
-       if (AutoHumValue < 25)
+       if (AutoHumValue < 23)
        {
         #ifdef Fahrenheit
          if (TargetTemp < 131) {
@@ -644,21 +603,29 @@ void loop(){
     if(currentMillis - debugMillis >= 2000) {     // Updates Serial Monitor data every 2 seconds
       debugMillis = currentMillis;
     Serial.print("DHT20: Humidity: ");
+    if ((Humidity >0))
+    {   
     Serial.print(Humidity);
     Serial.print("%");
     Serial.print("  |  "); 
     Serial.print("Temperature: ");
     Serial.print(Temperature);
     Serial.println(text);
+    }
+    else {Serial.println("Temperature: "); }
 
     #ifdef SecondTemp
      Serial.print("DHT21/22: Humidity: ");
+     if ((Humidity2 >0))
+     {
      Serial.print(Humidity2);
      Serial.print("%");
      Serial.print("  "); 
      Serial.print("Temperature: ");
      Serial.print(Temperature2);
      Serial.println(text);
+     }
+     else {Serial.println("Temperature: "); }
     #endif
     }
     #endif
