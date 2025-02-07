@@ -91,7 +91,6 @@ int bildpos = 0;	max 8192
 #endif
 }
 
-
 void drawStatus() {
    if ((AutoOffSet == true) or (AutoHumSet == true) or (HeatMaxSet == true))
    {
@@ -391,6 +390,20 @@ void drawTemperature1() {
       display.fillCircle(95, 25, 4, SSD1306_WHITE);
       display.fillCircle(95, 25, 2, SSD1306_BLACK);
     #endif
+    #ifdef BlankScreen 
+    #ifdef UsePixel
+    #ifdef BlankScreenAutoOff
+    if ((screensaver == true) and (screensaverCnt > 0) and (Hot == false)) {
+     dtostrf(screensaverCnt, 2, 0, TargetHumDisplay);
+     display.setTextSize(1);
+     display.setTextColor(SSD1306_WHITE);
+     display.setCursor(1,34);
+     display.print(TargetHumDisplay);
+     }
+    #endif
+    #endif 
+    #endif
+
   } else {
     #ifndef showFraction
 
@@ -490,6 +503,7 @@ void drawHumidity1() {
     display.fillRect(31, 14, 2, 2, SSD1306_WHITE);
     //display.println(Hum);
 
+
     #endif
 
   } else {
@@ -509,6 +523,22 @@ void drawHumidity1() {
     display.println(F("%"));
 
     display.fillRect(54, 38, 3, 3, SSD1306_WHITE);
+   
+    #ifdef DRYBOX0 
+    #ifdef BlankScreen 
+    #ifdef UsePixel
+    #ifdef BlankScreenAutoOff
+    if ((screensaver == true) and (screensaverOn == false) and (screensaverCntX > 0) ) {
+     dtostrf(screensaverCntX, 3, 0, TargetHumDisplay);
+     display.setTextSize(1);
+     display.setTextColor(SSD1306_WHITE);
+     display.setCursor(0,39);
+     display.print(TargetHumDisplay);
+     }
+    #endif
+    #endif 
+    #endif
+    #endif
  
   }
 }
@@ -538,14 +568,11 @@ void drawTemperature2() {
     display.setTextSize(2);
     display.setTextColor(SSD1306_WHITE);
 
-    //if (TempVal > 100){
-    //    display.setCursor(70,48);
-    //  } else {
-        display.setCursor(98,48);
-        display.print(TempFractionDisplay);
-        display.fillRect(94, 60, 2, 2, SSD1306_WHITE);  
-        display.setCursor(58,48);     
-      //}
+    display.setCursor(98,48);
+    display.print(TempFractionDisplay);
+    display.fillRect(94, 60, 2, 2, SSD1306_WHITE);  
+    display.setCursor(58,48);     
+
 
       display.print(TempIntegerDisplay);
       display.fillCircle(111, 50, 2, SSD1306_WHITE);

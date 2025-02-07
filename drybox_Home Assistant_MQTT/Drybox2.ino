@@ -6,14 +6,24 @@ Added support for a second temp/hum Sensor DHT21 or DHT22
 and AutoOff Function 
 and AutoHum Function
 and new Fan control, and Led Strip control
+and DS18B20 Temperatur sensors - 3 pieces are planned in the program
+and transfer to Home Assistant
+and ScreenSaver
+and now Fan run-on now depends on the temperature reached
+
 If heater is set on, the data now updated each 2 sec otherwise 10 sec 
 The TargetTemp is now 50°C, the AutoHum ist now 25%
-Update Display if Heating on is now 2 sec, tempDiff is now 0.1°C/0.18°F
+Update Display if Heating on is now 2 sec, 
+Should not be less than 2 seconds, due to query temperature sensors
+tempDiff is now 0.1°C/0.18°F
+humDif is 0.2%
+This settings can be canged in arduino_settings.h
+
 Caution! Led Pin is now 3 (was former 4) 
          because DS18B20 works for me only on PIN 4 = GPIO7 !!
 Werner Krenn - last modified 
 */
-char swversion[12] = "2025-02-01";
+char swversion[12] = "2025-02-07";
 /*
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
@@ -36,8 +46,6 @@ REQUIRES the following Arduino libraries:
 #include <Arduino.h>
 // This is for the Arduino IDE, where we always build with ArduinoJson. arduino-cli will not build/include libraries
 // that are not included anywhere. So we must include ArduinoJson.h so its available for IJson.h later.
-// For Platform IO, this is not the case and these examples are built both with ArduinoJson and nlohmann-json.
-
 
 #include "arduino_settings.h"
 
@@ -113,12 +121,6 @@ float tempC;
  #define Led 4
 #endif
 
-//#define PETG                         // Max = 73 °C	163
-//#define ABS                          // Max = 83 °C	181
-//#define ASA                          // Max = 93 °C	199
-//#define PC                           // Max = 123 °C	253
-//#define PA                           // Max = 143 °C	289
-
 #define DHT_PIN 9 // The Arduino Nano pin connected to DHT21/22 sensor
 #define DHT_TYPE DHT21
 //#define DHT_TYPE DHT22 
@@ -153,6 +155,7 @@ unsigned long ScreenSaverpreviousMillis = 0;
 #endif
 
 int FanValue = 0;
+bool FanValueSet = false;
 int AutoOffTimeValue;
 bool status = false;
 bool Hot = false;
@@ -176,6 +179,7 @@ char textF[] = "°F";
 #endif 
 
 float Temperature;
+float TemperatureC;
 float Humidity;
 float Temperature2;
 float Humidity2;
@@ -192,6 +196,9 @@ int bild_w = 0;
 int bildpos = 0; 
 bool screensaver = false;
 bool screensaverOn = false;
+bool screensaverSet = false;
+int screensaverCnt = 0;
+int screensaverCntX = 0;
 
 char TempIntegerDisplay[4];
 char TempFractionDisplay[4];
@@ -353,17 +360,8 @@ void setup(){
 
     int HeatMaxValue= Max;
     MinSet = int((MinSet *9/5) + 32);
-    int FanCor = int((FanCor *9/5) + 32);
-    int FanCor1 = int((FanCor1 *9/5) + 32);
-    int FanCor2 = int((FanCor2 *9/5) + 32);
-    //int FanCor3 = int((FanCor3 *9/5) + 32);
-    //int FanCor4 = int((FanCor4 *9/5) + 32);
-    int FanCor01 = int((FanCor01 *9/5) + 32);
-    int FanCor02 = int((FanCor02 *9/5) + 32);
-    int FanCor03 = int((FanCor03 *9/5) + 32);
-    int FanCor04 = int((FanCor04  *9/5) + 32);
-
     char text[] = "°F"; 
+ 
    if (withDuct == true)
     {
      tempDiff = 0.18;
@@ -463,6 +461,7 @@ void loop(){
       if (AutoOffTimeValue <= 0){
       status = false;
       digitalWrite(Heater, LOW);
+      if (FanValueSet == false) { FanSetting(); }
       }
      }
   }   
@@ -472,6 +471,7 @@ void loop(){
      if (Humidity <= AutoHumValue - humDiff)
      { 
         digitalWrite(Heater, LOW); 
+        if (FanValueSet == false) { FanSetting(); }
         HumOff = true;
         Hot = false;
         FanHumOn = true;
@@ -521,6 +521,14 @@ void loop(){
      AutoHumSet = true;
      AutoOffSetpreviousMillis = currentMillis;
      AutoOff = false;
+     #ifdef BlankScreen 
+     #ifdef UsePixel
+     #ifdef BlankScreenAutoOff
+      screensaver = true;
+     #endif
+     #endif 
+     #endif
+
     }
 
     #ifdef SecondTemp 
@@ -581,6 +589,7 @@ void loop(){
       {FanOnpreviousMillis = currentMillis;}
       sensorUpdate();
       digitalWrite(Heater, LOW);
+      if (FanValueSet == false) { FanSetting(); }
       Hot = false;
       HeatMaxValue = Max;
       display.clearDisplay();
@@ -613,15 +622,6 @@ void loop(){
       previousMillis = currentMillis;
       display.clearDisplay();
       drawTargetTemperature();
-      if (TargetTemp >= FanCor04) { FanDelay = 60; FanValue = FanDelay;} 
-      if (TargetTemp >= FanCor03) { FanDelay = 120; FanValue = FanDelay;}
-      if (TargetTemp >= FanCor02) { FanDelay = 180; FanValue = FanDelay;}
-      if (TargetTemp >= FanCor01) { FanDelay = 240; FanValue = FanDelay;}
-      if (TargetTemp >= FanCor) { FanDelay = 300; FanValue = FanDelay;} 
-      if (TargetTemp >= FanCor1) { FanDelay = 420; FanValue = FanDelay;} 
-      if (TargetTemp >= FanCor2) { FanDelay = 570; FanValue = FanDelay;} 
-      //if (TargetTemp >= FanCor3) { FanDelay = 780; FanValue = FanDelay;} 
-      //if (TargetTemp >= FanCor4) { FanDelay = 900; FanValue = FanDelay;} 
      } 
      if ((AutoOffSet == true) and (AutoHumSet == false) and (HeatMaxSet == false))                          // or increase AutoOff time
      {                                          
@@ -658,23 +658,31 @@ void loop(){
     }
 
     if(digitalRead(Button3) == LOW) {                 // Action button 3: decrease target temperature
-     if ((AutoOffSet == false) and (AutoHumSet == false) and (HeatMaxSet == false)) {
+
+     #ifdef BlankScreen 
+     #ifdef UsePixel
+     #ifdef BlankScreenAutoOff
+     if ((screensaverOn == true) and (AutoHum == true)) {
+      screensaverCnt = 30;
+      screensaverOn = false;
+      screensaverSet = true;
+      previousMillis = currentMillis;
+      showData();
+      }
+     #endif
+     #endif 
+     #endif
+
+    if ((AutoOffSet == false) and (AutoHumSet == false) and (HeatMaxSet == false) and (screensaverSet == false) ) {
+      
        TargetTemp = TargetTemp - 1;
        if (TargetTemp < MinSet)
-        { TargetTemp = MinSet;}
-      previousMillis = currentMillis;
-      display.clearDisplay();
-      drawTargetTemperature();
-      //if (TargetTemp < FanCor4) { FanDelay = 780; FanValue = FanDelay;}
-      //if (TargetTemp < FanCor3) { FanDelay = 660; FanValue = FanDelay;}
-      if (TargetTemp < FanCor2) { FanDelay = 420; FanValue = FanDelay;}
-      if (TargetTemp < FanCor1) { FanDelay = 300; FanValue = FanDelay;}
-      if (TargetTemp < FanCor) { FanDelay = 240; FanValue = FanDelay;}
-      if (TargetTemp < FanCor01) { FanDelay = 180; FanValue = FanDelay;}
-      if (TargetTemp < FanCor02) { FanDelay = 120; FanValue = FanDelay;}
-      if (TargetTemp < FanCor03) { FanDelay = 60; FanValue = FanDelay;}
-      if (TargetTemp < FanCor04) { FanDelay = 30; FanValue = FanDelay;}
-     } 
+         { TargetTemp = MinSet;}
+       previousMillis = currentMillis;
+       display.clearDisplay();
+       drawTargetTemperature();
+     }
+
      if (AutoOffSet == true)
       {
        AutoOffTimeValue = AutoOffTimeValue - 10;
@@ -684,7 +692,9 @@ void loop(){
        display.clearDisplay();
        drawAutoOfftMinutes();
      }
-     if ((AutoHumSet == true) and (AutoOffSet == false) and (HeatMaxSet == false))
+
+
+     if ((AutoHumSet == true) and (AutoOffSet == false) and (HeatMaxSet == false) and (screensaverSet == false))
      {
        AutoHumValue = AutoHumValue - 1;
        if (AutoHumValue < MinHumSet)
@@ -711,6 +721,8 @@ void loop(){
        display.clearDisplay();
        drawAutoHum();
      }
+
+
     #ifdef SecondTemp      
      if ((AutoHumSet == false) and (AutoOffSet == false) and (HeatMaxSet == true))
      {
@@ -732,7 +744,7 @@ void loop(){
       sensorUpdate();
 
       display.clearDisplay();
-      if (screensaverOn == true) {
+      if ((screensaverOn == true) and (screensaverSet == false) and (screensaverCnt <=0)) {
        printPixel();
       } else {       
        drawStatus();
@@ -771,6 +783,8 @@ void loop(){
 
   }
 
+
+
   // Heating system OFF:
   while(status == false){
     unsigned long currentMillis = millis();
@@ -778,10 +792,19 @@ void loop(){
     AutoOffSet = false;
     AutoOffTimeValue = AutoOffTime;
     digitalWrite(Heater, LOW);
+    if (FanValueSet == false) { FanSetting(); }
     Hot = false;
     if (FanOn == true)
-    {   
+    {  
+    #ifdef BlankScreen 
+    #ifdef UsePixel
+    #ifdef BlankScreenAutoOff
+    if (screensaver == true) { ScreenSaverpreviousMillis = currentMillis; };  
+    #endif
+    #endif
+    #endif
     FanValue = FanDelay - ((currentMillis - FanOnpreviousMillis)/1000);  
+
     if((currentMillis - FanOnpreviousMillis)/1000 >= FanDelay) {     // Switch off Fan delay
       FanOn = false;
       digitalWrite(Fan, LOW);
@@ -797,11 +820,14 @@ void loop(){
       screensaver = true;
       }
      if (screensaverOn == false) { 
-      if((currentMillis - ScreenSaverpreviousMillis)/1000 >= screenSaverTimeOut) {
+     #ifdef DRYBOX0 
+      screensaverCntX = screenSaverTimeOut - int( (currentMillis - ScreenSaverpreviousMillis)/1000 );
+     #endif 
+      if (((currentMillis - ScreenSaverpreviousMillis)/1000 >= screenSaverTimeOut) ) {
        screensaverOn = true;
        ScreenSaverpreviousMillis = currentMillis;
       }  
-     }
+     } 
     #endif
     #endif 
     #endif
@@ -838,7 +864,6 @@ void loop(){
      if ((screensaver == true) and (FanValue <=0)) { screensaverOn = true; }
     #endif
 
-    // if((digitalRead(Button3) == LOW) and (not showSecondTemp)) {                 // Action button 3: second Temp view on
     if(( digitalRead(Button3) == LOW )) {                 // Action button 3: ScreenSaver ?
       showSecondTemp = true;
       #ifdef BlankScreen
@@ -1033,3 +1058,27 @@ void printAddress(DeviceAddress deviceAddress)
   Serial.println("");
 }
 #endif
+
+void showData()
+{
+   display.clearDisplay();
+   drawStatus();
+     drawTemperature1();
+     drawHumidity1();
+     drawTemperature2();
+     drawHumidity2();
+   display.display(); 
+}
+
+void FanSetting()
+{
+      if (TemperatureC < 25) { FanDelay = 20; FanValue = FanDelay;}
+      if (TemperatureC >= FanCor04) { FanDelay = int((TemperatureC * 2) + (8*(TemperatureC-FanCor04))); FanValue = FanDelay;} 
+      if (TemperatureC >= FanCor03) { FanDelay = int((TemperatureC * 3) + (10*(TemperatureC-FanCor03))); FanValue = FanDelay;}
+      if (TemperatureC >= FanCor02) { FanDelay = int((TemperatureC * 4) + (12*(TemperatureC-FanCor02))); FanValue = FanDelay;}
+      if (TemperatureC >= FanCor01) { FanDelay = int((TemperatureC * 5) + (10*(TemperatureC-FanCor01))); FanValue = FanDelay;}
+      if (TemperatureC >= FanCor) { FanDelay = int((TemperatureC * 6) + (17*(TemperatureC-FanCor))); FanValue = FanDelay;} 
+      if (TemperatureC >= FanCor1) { FanDelay = int((TemperatureC * 7) + (19*(TemperatureC-FanCor1))); FanValue = FanDelay;} 
+      if (TemperatureC >= FanCor2) { FanDelay = int((TemperatureC * 8) + (12*(TemperatureC-FanCor2))); FanValue = FanDelay;} 
+      FanValueSet = true;
+}

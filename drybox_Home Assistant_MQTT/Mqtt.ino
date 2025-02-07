@@ -70,7 +70,8 @@ void mqtt(){
     else
     if (AutoHum == true) 
     { 
-     _ha_entity_mode.publishNumber(4);
+      if (screensaverOn == true) { _ha_entity_mode.publishNumber(6); }
+      else { _ha_entity_mode.publishNumber(4); }
      char s1[20]="AutoHum ";     
      dtostrf(AutoHumValue, 2, 0, MinuteDisplay);
      strcat(s1,MinuteDisplay); 

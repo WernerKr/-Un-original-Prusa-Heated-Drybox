@@ -87,6 +87,12 @@ uint8_t sensor3[8] = { 0x28, 0x57, 0x8A, 0x84, 0x00, 0x00, 0x00, 0x14 };
 
 #endif
 
+//#define PETG                         // Max = 73 °C	163
+//#define ABS                          // Max = 83 °C	181
+//#define ASA                          // Max = 93 °C	199
+//#define PC                           // Max = 123 °C	253
+//#define PA                           // Max = 143 °C	289
+
 float TemperatureCor = 0.0;               // correction Temperatur
 float HumidityCor = 0.0;                  // correction Humidity
 float Temperature2Cor = 0.0;              // correction Temperatur2 if #define SecondTemp 
@@ -99,24 +105,23 @@ int HeatMaxValue = 85;
 int HeatMax = 140;
 int HeatMin = 70;
 
+int Refresh = 2000;                       // Update values in msec if heater is on (former 5000)
 bool overHeat = true;                     // control overheating - only used if second temp/hum is available
 bool withDuct = true;                     // Duct installed -> Tempdiff = 0.1°C otherwise 0.3°C
 int TargetTemp = 50;
-int Refresh = 2000;                       // Update values in msec if heater is on (former 5000)
 int MaxSet = 70;                          // max allowed setting TargetTemp °C
 int MinSet = 20;                          // min allowed setting TargetTemp °C
 int AutoOffTime = 360;                    // here 6 hours
 int MaxAutoOffTime = 2880;                // max 2 days
-int FanDelay = 300;                       // 300 seconds=5 minutes (max 999 seconds supported)
-int FanCor = 50;                          // >= 50°C TargetTemp add to Fandelay 60 or 90 sec
-int FanCor1 = 55;                         // all FanCor are also in °C - are later converted to Fahrenheit if set
-int FanCor2 = 60;
-//int FanCor3 = 65;
-//int FanCor4 = 70;
-int FanCor01 = 40;
-int FanCor02 = 35;
-int FanCor03 = 30;
-int FanCor04 = 25;
+
+int FanDelay = 300;                       // 300 seconds=5 minutes  - now depends from Temperature
+int FanCor2 = 60;		// *8=480 + (12*(TemperatureC-60)) -> 480 .. 600
+int FanCor1 = 55;		// *7=385 + (19*(TemperatureC-55)) -> 385 .. 461
+int FanCor = 50;		// *6=300 + (17*(TemperatureC-50)) -> 300 .. 368
+int FanCor01 = 40;		// *5=200 + (10*(TemperatureC-40)) -> 200 .. 290
+int FanCor02 = 35;		// *4=140 + (12*(TemperatureC-35)) -> 140 .. 188
+int FanCor03 = 30;		// *3=90 + (10*(TemperatureC-30)) -> 90 .. 130
+int FanCor04 = 25;		// *2=50 + (8*(TemperatureC-25)) -> 50 .. 82 
 
 int TargetHum = 25;
 

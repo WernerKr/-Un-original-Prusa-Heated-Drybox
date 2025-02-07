@@ -29,7 +29,8 @@ void sensorUpdate(){
    } 
   #endif  
 
-  Temperature = dht20.getTemperature() + TemperatureCor;      // Get temperature in degrees Celcius
+  Temperature = dht20.getTemperature() + TemperatureCor;        // Get temperature in degrees Celcius
+  TemperatureC = Temperature;
   Humidity = (dht20.getHumidity()*100) + HumidityCor;        // Get relative humidity
   #ifdef Fahrenheit
     Temperature = (Temperature *9/5) + 32;   // Converts temperature to fahrenheit if defined
@@ -38,6 +39,7 @@ void sensorUpdate(){
   if (Humidity >= (99.9 + HumidityCor)){
     Humidity = 0;
     Temperature = 0;
+    TemperatureC = 50;
   }
 
 #ifdef DS18B20xx
@@ -111,16 +113,23 @@ void heater(){
       else { digitalWrite(Fan, HIGH); }
       FanRun = true;
       Hot = true;
+      if (FanValue > 0 ) {screensaverCnt = 0; }
     } 
     if ((Temperature > (TargetTemp + tempDiff)) or ((AutoHum == true) and (HumOff == true ))){      // Turns heating element off if more than 0.2 or 0.5 degrees celcius over the target temperature
       digitalWrite(Heater, LOW);
+      //if ((FanValueSet == false) and (FanValue>0) ) { FanSetting(); }
       Hot = false;  
       if ((AutoHum == true) and (FanValue <=0)) {
-       if (screensaver == true) {screensaverOn = true; } 
+       if (screensaver == true) {
+        if ((screensaverSet == true) and (screensaverCnt <=29)) {screensaverSet = false;}
+        if (screensaverCnt <= 0) { screensaverOn = true; }
+        if (screensaverOn == false) {screensaverCnt -= 1; }
+        } 
        digitalWrite(Fan, LOW);
        FanRun = false; 
       }   
     } 
+    if (Hot == true) {FanValueSet = false;}
   }
   else { digitalWrite(Heater, LOW); }
 }
