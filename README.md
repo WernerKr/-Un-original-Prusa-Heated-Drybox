@@ -6,6 +6,18 @@ Therefore, no more 5V is taken from this pin, only from buck converter (or Vin P
 ![IDE_Arduino_Nano_ESP32](https://github.com/user-attachments/assets/f01aed85-457e-4a97-acce-c30514ae5602)
 ![Arduino Nano ESP32 Drybox](https://github.com/user-attachments/assets/de980e5b-2eff-41b6-82df-dcc8eefabb11)
 
+
+### Update 2025-02-07
+- Fan run-on now depends on the temperature reached
+- If #define BlankScreen and #define BlankScreenAutoOff are active and AutoHum is also active, the screen saver is activated after the heating and fan are off (Pixel).
+- To get the display back, press the "Down Button". The display is then activated for 1 minute (countdown 30) and you can then also reduce the target temperature here.
+- If the humidity rises again (heating on again), the display is immediately activated again.
+
+##### Graphic AutoHum 27%
+![AutoHum_27](https://github.com/user-attachments/assets/62d19228-2344-42bd-901b-ffd49671a803)
+
+
+#### All user settings are now stored in the file arduino_settings.h
 - The former "down" Button (was Second Temp/Hum on/off) is now for ScreenSaver
 - The former PIN D4 for Led is now D3. 
 - The DS18B20 data works only with PIN D4.
