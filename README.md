@@ -3,6 +3,7 @@
 Required processor Arduino Nano ESP32-S3, is pin compatible and has the same dimensions as the Arduino Nano 
 with the exception that the 5V pin only supplies a voltage when USB is connected. 
 Therefore, no more 5V is taken from this pin, only from buck converter (or Vin Pin, whereas this Pin is always connected to buck converter).
+Invalid values ​​(85°C or -127°C) are displayed as 0.0 °C/F but are not transmitted to Home Assistant.
 ![IDE_Arduino_Nano_ESP32](https://github.com/user-attachments/assets/f01aed85-457e-4a97-acce-c30514ae5602)
 ![Arduino Nano ESP32 Drybox](https://github.com/user-attachments/assets/de980e5b-2eff-41b6-82df-dcc8eefabb11)
 
