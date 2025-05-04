@@ -36,7 +36,7 @@ void sensorUpdate(){
     Temperature = (Temperature *9/5) + 32;   // Converts temperature to fahrenheit if defined
     //Temperature = 102.4;
   #endif
-  if (Humidity >= (99.9 + HumidityCor)){
+  if ((Humidity >= 115) or  (Humidity < 0)){
     Humidity = 0;
     Temperature = 0;
     TemperatureC = 50;
@@ -52,7 +52,7 @@ void sensorUpdate(){
   #ifdef DallasAdrSet
    sensor1val = sensors.getTempC(sensor1);
   #endif
-  if ((sensor1val <= 0) or (sensor1val == 85.00))  {
+  if ((sensor1val <= 0) or (sensor1val == 85.00) or (sensor1val >= 150.00))  {
     sensor1val  = 0;
   }
     #ifdef Fahrenheit
@@ -68,7 +68,7 @@ void sensorUpdate(){
   #ifdef DallasAdrSet
    sensor2val = sensors.getTempC(sensor2);
   #endif
-  if ((sensor2val <= 0)  or (sensor2val == 85.00)){
+  if ((sensor2val <= 0)  or (sensor2val == 85.00) or (sensor2val >= 150.00)){
     sensor2val  = 0;
   }  
     #ifdef Fahrenheit
@@ -84,7 +84,7 @@ void sensorUpdate(){
   #ifdef DallasAdrSet
    sensor3val = sensors.getTempC(sensor3);
   #endif
-  if ((sensor3val <= 0) or (sensor3val == 85.00)){
+  if ((sensor3val <= 0) or (sensor3val == 85.00) or (sensor3val >= 150.00)){
     sensor3val  = 0;
   }  
     #ifdef Fahrenheit
