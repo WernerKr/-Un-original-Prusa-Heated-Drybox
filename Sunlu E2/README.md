@@ -1,3 +1,5 @@
+##### Will be more detailed...
+
 # Settings: Target temperature 70°C
 
 ## Temperature and consumption diagram of the Sunlu E2 dryer
