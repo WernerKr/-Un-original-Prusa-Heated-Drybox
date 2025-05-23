@@ -4,6 +4,7 @@
  - DHT20: Sunlu Temperatur außen unten
  - DHT22: Sunlu Temp vor Ansaug
  - DS18B20: Sunlu Temp1, Temp2, Temp3
+ - Camera: Flir One Pro
  - Recording via Arduino Nano ESP32-S3
  - Evaluation via Home Assistant
 
