@@ -1,4 +1,11 @@
 # Settings: Target temperature 70°C
+#### Sensors used:
+ - Sonoff SNZB-02D
+ - DHT20: Sunlu Temperatur außen unten
+ - DHT22: Sunlu Temp vor Ansaug
+ - DS18B20: Sunlu Temp1, Temp2, Temp3
+ - Recording via Arduino Nano ESP32-S3
+ - Evaluation via Home Assistant
 
 ## Temperature and consumption diagram of the Sunlu S4 dryer
 ![Sunlu S4](https://github.com/user-attachments/assets/3059f17f-31e1-4146-9ce8-698d15483e8d)
