@@ -1,5 +1,12 @@
 ##### Will be more detailed...
-## Sensors:
+## Sensors used:
+Sonoff SNZB-02D (Temperatures from -9.9°C to +60°C ) stopped at 59.9 °C - removed for Target 90°C and 110°C
+DHT20: Sunlu Temperatur außen unten (Temperatures from -40°C to +80°C ) but masures above +80°C
+DHT22: Sunlu Temp vor Ansaug (Temperatures from -40°C to +80°C ) but measures above +80°C 
+DS18B20: Sunlu Temp1, Temp2, Temp3 (Measures Temperatures from -55°C to +125°C ) stopped at 127.94 °C
+Camera: Flir One Pro
+Recording via Arduino Nano ESP32-S3
+Evaluation via Home Assistant
 ![E2_Sensors](https://github.com/user-attachments/assets/2bbaa777-a04b-4f77-bba6-5a8a7f4ae813)
 
 # Diagram at Target temperature 70°C, 90°C and 110°C
