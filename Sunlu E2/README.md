@@ -1,4 +1,6 @@
 ##### Will be more detailed...
+## Sensors:
+![E2_Sensors](https://github.com/user-attachments/assets/2bbaa777-a04b-4f77-bba6-5a8a7f4ae813)
 
 # Diagram at Target temperature 70°C, 90°C and 110°C
 ![Sunlu_E2_00](https://github.com/user-attachments/assets/fc25d732-edb7-4aa3-8ba0-5ab7a6e92fc0)
