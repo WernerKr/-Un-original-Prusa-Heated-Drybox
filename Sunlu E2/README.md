@@ -6,7 +6,6 @@
 - Camera: Flir One Pro
 - Recording via Arduino Nano ESP32-S3
 - Evaluation via Home Assistant
-
 ![E2_Sensorsx_txt](https://github.com/user-attachments/assets/28235810-fd0e-4011-8489-d3b6688e530b)
 ![Sunlu_E2_00](https://github.com/user-attachments/assets/fc25d732-edb7-4aa3-8ba0-5ab7a6e92fc0)
 
