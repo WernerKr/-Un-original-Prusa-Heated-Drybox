@@ -47,6 +47,8 @@
 
 ### Inside
 ![E2_Heating_110x](https://github.com/user-attachments/assets/f4b4c5c8-0b3d-4961-9c2e-7225bcd37dfd)
+![E2_Heating_110_2](https://github.com/user-attachments/assets/0f623682-edf7-4fe8-b1a1-8d6d1e3061a2)
+
 
 ### Outside (110°C)
 ![E2_outside_frontx](https://github.com/user-attachments/assets/3c3fcc50-f8dc-43ee-a1ec-1e281a4b88a6)
