@@ -10,23 +10,19 @@
 ![Sunlu_E2_00](https://github.com/user-attachments/assets/fc25d732-edb7-4aa3-8ba0-5ab7a6e92fc0)
 
 ## Diagram at Target temperature 70°C, 90°C and 110°C
-
 ### Settings: Target temperature 70°C
 #### Temperature and consumption diagram of the Sunlu E2 dryer 70°C
-![E2_70x](https://github.com/user-attachments/assets/2a321ad6-f813-45fe-a518-388007b5f91f)
+![E2_70x](https://github.com/user-attachments/assets/1a60771d-d7cb-4a0f-8724-330dd720581d)
 
 ![Sunlu_E2_70x](https://github.com/user-attachments/assets/63736453-b828-46c7-bb7d-4700fc4cc2bf)
 ![Sunlu_E2_70_1x](https://github.com/user-attachments/assets/106f2799-2d07-4c8d-83bf-9e2c462850d7)
 ![Sunlu_E2_70_2x](https://github.com/user-attachments/assets/6f3ed0cc-4e00-44c7-9585-56be04baa0b7)
 ##### Inside
 ![E2_inside_70x](https://github.com/user-attachments/assets/e56cb7be-f84a-4db7-8eca-8b474c298c14)
-
-#### Temperatures after switching off (70°C)
-![E2_after_Switch_offx](https://github.com/user-attachments/assets/6ed8e948-e7e6-45f5-9b31-3c79b8befa63)
-
-#### after 3 minutes (70°C)
-![E2_and_then_after_Switch_off_3minx](https://github.com/user-attachments/assets/bae3c099-e122-4805-9998-d66ec16d25c8)
-
+##### Temperatures after switching off (70°C)
+![E2_after_Switch_offx](https://github.com/user-attachments/assets/ee67b660-09ea-4ae1-949f-12630c23f011)
+##### after 3 minutes (70°C)
+![E2_and_then_after_Switch_off_3minx](https://github.com/user-attachments/assets/7e17917c-f7d8-46e2-aa76-7831c3c911a1)
 
 ### Settings: Target temperature 90°C
 #### Temperature and consumption diagram of the Sunlu E2 dryer 90°C
@@ -34,10 +30,9 @@
 ![Sunlu_E2_90_1x](https://github.com/user-attachments/assets/0520899f-a84b-499e-aca7-e22f0ea5978f)
 ![Sunlu_E2_90_2x](https://github.com/user-attachments/assets/ecfa21ab-5170-4bb4-b551-69225398e582)
 
-
 ### Settings: Target temperature 110°C (max reached 106.13°C sucking the air) 
+![E2_Set_110x](https://github.com/user-attachments/assets/2ce97f27-ddb6-4253-a2d2-ac1b4b56d116)
 #### Temperature and consumption diagram of the Sunlu E2 dryer 110°C
-![E2_Set_110x](https://github.com/user-attachments/assets/32a6982a-f583-4620-ae7a-e8f960535f19)
 ![Sunlu_E2_110x](https://github.com/user-attachments/assets/362cdc95-9ed0-4d11-ba8a-eb1200249768)
 ![Sunlu_E2_110_1x](https://github.com/user-attachments/assets/8c06ab44-ab43-4662-b3d9-af41b6426f1d)
 ![Sunlu_E2_110_2x](https://github.com/user-attachments/assets/62f8334a-fce7-4c78-ba05-1f6662ca3ea1)
@@ -45,7 +40,7 @@
 ![Sunlu_e2_110_end](https://github.com/user-attachments/assets/376245d8-9a0f-4c9e-b7fb-e870698fed87)
 
 ### Inside
-![E2_Heating_110x](https://github.com/user-attachments/assets/f4b4c5c8-0b3d-4961-9c2e-7225bcd37dfd)
+![E2_Heating_110x](https://github.com/user-attachments/assets/3148980c-d1bf-41e6-af10-cc1d49cdf6a9)
 ![E2_Heating_110_2](https://github.com/user-attachments/assets/71da3b0f-8fae-4fe6-ae12-f20f133bd358)
 
 
