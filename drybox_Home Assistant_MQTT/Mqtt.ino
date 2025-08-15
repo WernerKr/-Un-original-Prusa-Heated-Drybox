@@ -14,6 +14,15 @@ void mqtt(){
     _ha_entity_switch_fan.publishConfiguration();
     #ifdef controlLed
      _ha_entity_switch_led.publishConfiguration();
+     // Listen for state changes coming from Home Assistant 
+     _ha_entity_switch_led.setOnState([](bool on) {
+       if (on) {
+         // Call the function to turn the LED on when the switch is set to 'on'.
+         ledOn();
+       } else {
+         ledOff();
+       }
+     });
     #endif
     _ha_entity_temperature_target.publishConfiguration();
     _ha_entity_humidity_target.publishConfiguration();
@@ -128,4 +137,5 @@ void mqtt(){
      digitalWrite(LED_BLUE, HIGH);
   }
 #endif  
+
 }

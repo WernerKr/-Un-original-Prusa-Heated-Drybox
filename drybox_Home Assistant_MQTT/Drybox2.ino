@@ -906,17 +906,10 @@ void loop(){
     #ifdef controlLed
     if (status == false){
      if((digitalRead(Button2) == LOW) and (not showLed)) {                 // Action button 2: LED on
-      showLed = true;
-      digitalWrite(Led, HIGH);
-      LedOn = true;
-      delay(200);
+      ledOn();
      } 
      if((digitalRead(Button2) == LOW) and (showLed)) {                 // Action button 2: LED off
-      showLed = false;
-      showLedSet = false;
-      LedOn = false;
-      digitalWrite(Led, LOW);
-      delay(200);
+      ledOff();
      } 
     }
 
@@ -1081,4 +1074,20 @@ void FanSetting()
       if (TemperatureC >= FanCor1) { FanDelay = int((TemperatureC * 7) + (19*(TemperatureC-FanCor1))); FanValue = FanDelay;} 
       if (TemperatureC >= FanCor2) { FanDelay = int((TemperatureC * 8) + (12*(TemperatureC-FanCor2))); FanValue = FanDelay;} 
       FanValueSet = true;
+}
+
+void ledOn() {
+  showLed = true;
+  digitalWrite(Led, HIGH);
+  LedOn = true;
+  delay(200);
+ 
+}
+
+void ledOff() {
+  showLed = false;
+  showLedSet = false;
+  LedOn = false;
+  digitalWrite(Led, LOW);
+  delay(200);
 }
