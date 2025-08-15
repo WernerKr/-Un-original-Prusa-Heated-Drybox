@@ -23,7 +23,7 @@ Caution! Led Pin is now 3 (was former 4)
          because DS18B20 works for me only on PIN 4 = GPIO7 !!
 Werner Krenn - last modified 
 */
-char swversion[12] = "2025-02-07";
+char swversion[12] = "2025-08-15";
 /*
 REQUIRES the following Arduino libraries:
  - Adafruit_GFX Library: https://github.com/adafruit/Adafruit-GFX-Library
